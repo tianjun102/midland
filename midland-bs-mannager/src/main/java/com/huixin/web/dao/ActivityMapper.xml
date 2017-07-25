@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huixin.web.dao.ActivityMapper">
+    <resultMap id="BaseResultMap" type="com.huixin.web.model.Activity">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="acti_title" property="actiTitle" jdbcType="VARCHAR" />
+        <result column="acti_details" property="actiDetails" jdbcType="VARCHAR" />
+        <result column="acti_thumb_pic1" property="acti_thumb_pic1" jdbcType="VARCHAR" />
+        <result column="acti_thumb_pic2" property="acti_thumb_pic2" jdbcType="VARCHAR" />
+        <result column="clicknum" property="clickNum" jdbcType="INTEGER" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="addtime" property="addTime" jdbcType="TIMESTAMP" />
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+        <result column="is_show" property="isShow" jdbcType="INTEGER" />
+        <result column="user_by" property="userBy" jdbcType="VARCHAR" />
+        <result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
+    </resultMap>
+    
+	<sql id="Base_Column_List" >
+		  id,acti_title,acti_thumb_pic1,acti_thumb_pic2,acti_details,clicknum,update_time,addtime,start_time,end_time,is_show,user_by,sort_order
+	</sql>
+	
+    
+    <select id="selectActivityListByParem" resultMap="BaseResultMap" parameterType="com.huixin.web.model.Activity">
+      select 
+      <include refid="Base_Column_List"></include>
+       from activity where 1=1
+       <if test="id != null">
+       		and id = #{id}
+       </if>
+       <if test="actiTitle != null">
+      		and acti_title  like CONCAT(CONCAT('%', #{actiTitle}), '%')
+       </if>
+       <if test="actiDetails != null">
+      		and acti_details = #{actiDetails}
+       </if>
+       <if test="acti_thumb_pic1 != null">
+      		and acti_thumb_pic1 = #{acti_thumb_pic1}
+       </if>
+       <if test="acti_thumb_pic2 != null">
+      		and acti_thumb_pic2 = #{acti_thumb_pic2}
+       </if>
+       <if test="clickNum != null">
+      		and clicknum = #{clickNum}
+       </if>
+       <if test="addTime != null">
+      		and addtime = #{addTime}
+       </if>
+       <if test="startTime != null">
+      		and start_time = #{startTime}
+       </if>
+       <if test="endTime != null">
+      		and end_time = #{endTime}
+       </if>
+       <if test="isShow != null">
+      		and is_show = #{isShow}
+       </if>
+       <if test="isShow == null">
+      		and is_show = 1
+       </if>
+       <if test="userBy != null">
+      		and user_by = #{userBy}
+       </if>
+       <if test="sortOrder != null">
+      		and sort_order = #{sortOrder}
+       </if>
+       <if test="updateTime != null">
+      		and update_time = #{updateTime}
+       </if>
+       order by update_time desc
+    </select>
+    
+    <select id="selectActivityByParem" resultMap="BaseResultMap" parameterType="com.huixin.web.model.Activity">
+       select 
+      <include refid="Base_Column_List"></include>
+       from activity where id = #{id}
+    </select>
+    
+    <insert id="insetActivity" parameterType="com.huixin.web.model.Activity">
+    	insert into activity 
+     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="actiTitle != null" >
+        acti_title,
+      </if>
+      <if test="actiDetails != null" >
+        acti_details,
+      </if>
+      <if test="acti_thumb_pic1 != null" >
+        acti_thumb_pic1,
+      </if>
+      <if test="acti_thumb_pic2 != null" >
+        acti_thumb_pic2,
+      </if>
+      <if test="clickNum != null" >
+        clicknum,
+      </if>
+      <if test="updateTime != null">
+      	updateTime,
+      </if>
+      <if test="addTime != null" >
+        addtime,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="isShow != null" >
+        is_show,
+      </if>
+      <if test="userBy != null">
+      	user_by,
+      </if>
+      <if test="sortOrder != null">
+     	sort_order
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="actiTitle != null" >
+        #{actiTitle},
+      </if>
+      <if test="actiDetails != null" >
+        #{actiDetails},
+      </if>
+      <if test="acti_thumb_pic1 != null" >
+        #{acti_thumb_pic1},
+      </if>
+      <if test="acti_thumb_pic2 != null" >
+        #{acti_thumb_pic2},
+      </if>
+      <if test="clickNum != null" >
+        #{clickNum},
+      </if>
+      <if test="updateTime != null">
+      	#{updateTime},
+      </if>
+      <if test="addTime != null" >
+        #{addTime},
+      </if>
+      <if test="startTime != null" >
+        #{startTime},
+      </if>
+      <if test="endTime != null" >
+        #{endTime},
+      </if>
+      <if test="isShow != null" >
+        #{isShow},
+      </if>
+      <if test="userBy != null">
+      	#{userBy},
+       </if>
+      <if test="sortOrder != null">
+     	#{sortOrder}
+      </if>
+    </trim>
+    
+    </insert>
+    
+	<!--<update id="deleteActivity" parameterType="com.huixin.web.model.Activity">
+    update activity
+    <set>
+     is_show = 0
+    </set>
+    where id = #{id}
+    </update> -->
+    
+    <delete id="deleteActivity" parameterType="com.huixin.web.model.Activity">
+    	delete from activity where id = #{id}
+    </delete>
+    
+    <update id="updateActivityById" parameterType="com.huixin.web.model.Activity" >
+    update activity 
+	    <set>
+	      <if test="actiTitle != null" >
+	        acti_title = #{actiTitle},
+	      </if>
+	      <if test="actiDetails != null" >
+	        acti_details = #{actiDetails},
+	      </if>
+	      <if test="acti_thumb_pic1 != null" >
+	        acti_thumb_pic1 = #{acti_thumb_pic1},
+	      </if>
+	      <if test="acti_thumb_pic2 != null" >
+	        acti_thumb_pic2 = #{acti_thumb_pic2},
+	      </if>
+	      <if test="updateTime != null">
+      		update_time = #{updateTime},
+      	  </if>
+	      <if test="addTime != null" >
+	        addtime = #{addTime},
+	      </if>
+	      <if test="startTime != null" >
+	        start_time = #{startTime},
+	      </if>
+	      <if test="clickNum != null" >
+	        clicknum = #{clickNum},
+	      </if>
+	      <if test="endTime != null" >
+	        end_time = #{endTime},
+	      </if>
+	      <if test="isShow != null" >
+	        is_show = #{isShow},
+	      </if>
+	      <if test="userBy != null">
+      		user_by = #{userBy}
+	      </if>
+	      <if test="sortOrder != null">
+	      	sort_order = #{sortOrder}
+	      </if>
+	    </set>
+	    where id = #{id}
+    </update>
+</mapper>

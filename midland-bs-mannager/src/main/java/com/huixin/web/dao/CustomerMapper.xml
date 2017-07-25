@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huixin.web.dao.CustomerMapper">
+  <resultMap id="BaseResultMap" type="com.huixin.web.model.Customer">
+    <id column="cust_id" jdbcType="INTEGER" property="custId" />
+    <result column="cust_code" jdbcType="VARCHAR" property="custCode" />
+    <result column="cust_name" jdbcType="VARCHAR" property="custName" />
+    <result column="cust_type" jdbcType="INTEGER" property="custType" />
+    <result column="cust_full_name" jdbcType="VARCHAR" property="custFullName" />
+    <result column="cust_parent_id" jdbcType="INTEGER" property="custParentId" />
+    <result column="area_id" jdbcType="INTEGER" property="areaId" />
+    <result column="cust_note" jdbcType="VARCHAR" property="custNote" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="cust_phone" jdbcType="VARCHAR" property="custPhone" />
+    <result column="cust_tel" jdbcType="VARCHAR" property="custTel" />
+    <result column="cust_email" jdbcType="VARCHAR" property="custEmail" />
+    <result column="business_license" jdbcType="VARCHAR" property="businessLicense" />
+    <result column="business_license_pic" jdbcType="VARCHAR" property="businessLicensePic" />
+    <result column="regist_address" jdbcType="VARCHAR" property="registAddress" />
+    <result column="enter_attr" jdbcType="INTEGER" property="enterAttr" />
+    <result column="enter_prod" jdbcType="VARCHAR" property="enterProd" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="status" jdbcType="BIT" property="status" />
+    <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+    <result column="deleteFlag" property="deleteFlag" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    cust_id, cust_code, cust_name, cust_type, cust_full_name, cust_parent_id, area_id, 
+    cust_note, real_name, id_card, cust_phone, cust_tel, cust_email, business_license, 
+    business_license_pic, regist_address, enter_attr, enter_prod, create_time, create_by, 
+    update_time, update_by, status
+  </sql>
+  <select id="selectByExample" parameterType="com.huixin.web.model.CustomerExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from customer
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer
+    where cust_id = #{custId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from customer
+    where cust_id = #{custId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.huixin.web.model.CustomerExample">
+    delete from customer
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.huixin.web.model.Customer">
+    insert into customer (cust_id, cust_code, cust_name, 
+      cust_type, cust_full_name, cust_parent_id, 
+      area_id, cust_note, real_name, 
+      id_card, cust_phone, cust_tel, 
+      cust_email, business_license, business_license_pic, 
+      regist_address, enter_attr, enter_prod, 
+      create_time, create_by, update_time, 
+      update_by, status)
+    values (#{custId,jdbcType=INTEGER}, #{custCode,jdbcType=VARCHAR}, #{custName,jdbcType=VARCHAR}, 
+      #{custType,jdbcType=INTEGER}, #{custFullName,jdbcType=VARCHAR}, #{custParentId,jdbcType=INTEGER}, 
+      #{areaId,jdbcType=INTEGER}, #{custNote,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, 
+      #{idCard,jdbcType=VARCHAR}, #{custPhone,jdbcType=VARCHAR}, #{custTel,jdbcType=VARCHAR}, 
+      #{custEmail,jdbcType=VARCHAR}, #{businessLicense,jdbcType=VARCHAR}, #{businessLicensePic,jdbcType=VARCHAR}, 
+      #{registAddress,jdbcType=VARCHAR}, #{enterAttr,jdbcType=INTEGER}, #{enterProd,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=VARCHAR}, #{status,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="custId" parameterType="com.huixin.web.model.Customer">
+    insert into customer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="custId != null">
+        cust_id,
+      </if>
+      <if test="custCode != null">
+        cust_code,
+      </if>
+      <if test="custName != null">
+        cust_name,
+      </if>
+      <if test="custType != null">
+        cust_type,
+      </if>
+      <if test="custFullName != null">
+        cust_full_name,
+      </if>
+      <if test="custParentId != null">
+        cust_parent_id,
+      </if>
+      <if test="areaId != null">
+        area_id,
+      </if>
+      <if test="custNote != null">
+        cust_note,
+      </if>
+      <if test="realName != null">
+        real_name,
+      </if>
+      <if test="idCard != null">
+        id_card,
+      </if>
+      <if test="custPhone != null">
+        cust_phone,
+      </if>
+      <if test="custTel != null">
+        cust_tel,
+      </if>
+      <if test="custEmail != null">
+        cust_email,
+      </if>
+      <if test="businessLicense != null">
+        business_license,
+      </if>
+      <if test="businessLicensePic != null">
+        business_license_pic,
+      </if>
+      <if test="registAddress != null">
+        regist_address,
+      </if>
+      <if test="enterAttr != null">
+        enter_attr,
+      </if>
+      <if test="enterProd != null">
+        enter_prod,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="custId != null">
+        #{custId,jdbcType=INTEGER},
+      </if>
+      <if test="custCode != null">
+        #{custCode,jdbcType=VARCHAR},
+      </if>
+      <if test="custName != null">
+        #{custName,jdbcType=VARCHAR},
+      </if>
+      <if test="custType != null">
+        #{custType,jdbcType=INTEGER},
+      </if>
+      <if test="custFullName != null">
+        #{custFullName,jdbcType=VARCHAR},
+      </if>
+      <if test="custParentId != null">
+        #{custParentId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="custNote != null">
+        #{custNote,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="custPhone != null">
+        #{custPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="custTel != null">
+        #{custTel,jdbcType=VARCHAR},
+      </if>
+      <if test="custEmail != null">
+        #{custEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicense != null">
+        #{businessLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicensePic != null">
+        #{businessLicensePic,jdbcType=VARCHAR},
+      </if>
+      <if test="registAddress != null">
+        #{registAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="enterAttr != null">
+        #{enterAttr,jdbcType=INTEGER},
+      </if>
+      <if test="enterProd != null">
+        #{enterProd,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.huixin.web.model.CustomerExample" resultType="java.lang.Integer">
+    select count(*) from customer
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update customer
+    <set>
+      <if test="record.custId != null">
+        cust_id = #{record.custId,jdbcType=INTEGER},
+      </if>
+      <if test="record.custCode != null">
+        cust_code = #{record.custCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custName != null">
+        cust_name = #{record.custName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custType != null">
+        cust_type = #{record.custType,jdbcType=INTEGER},
+      </if>
+      <if test="record.custFullName != null">
+        cust_full_name = #{record.custFullName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custParentId != null">
+        cust_parent_id = #{record.custParentId,jdbcType=INTEGER},
+      </if>
+      <if test="record.areaId != null">
+        area_id = #{record.areaId,jdbcType=INTEGER},
+      </if>
+      <if test="record.custNote != null">
+        cust_note = #{record.custNote,jdbcType=VARCHAR},
+      </if>
+      <if test="record.realName != null">
+        real_name = #{record.realName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCard != null">
+        id_card = #{record.idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custPhone != null">
+        cust_phone = #{record.custPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custTel != null">
+        cust_tel = #{record.custTel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.custEmail != null">
+        cust_email = #{record.custEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessLicense != null">
+        business_license = #{record.businessLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessLicensePic != null">
+        business_license_pic = #{record.businessLicensePic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registAddress != null">
+        regist_address = #{record.registAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.enterAttr != null">
+        enter_attr = #{record.enterAttr,jdbcType=INTEGER},
+      </if>
+      <if test="record.enterProd != null">
+        enter_prod = #{record.enterProd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update customer
+    set cust_id = #{record.custId,jdbcType=INTEGER},
+      cust_code = #{record.custCode,jdbcType=VARCHAR},
+      cust_name = #{record.custName,jdbcType=VARCHAR},
+      cust_type = #{record.custType,jdbcType=INTEGER},
+      cust_full_name = #{record.custFullName,jdbcType=VARCHAR},
+      cust_parent_id = #{record.custParentId,jdbcType=INTEGER},
+      area_id = #{record.areaId,jdbcType=INTEGER},
+      cust_note = #{record.custNote,jdbcType=VARCHAR},
+      real_name = #{record.realName,jdbcType=VARCHAR},
+      id_card = #{record.idCard,jdbcType=VARCHAR},
+      cust_phone = #{record.custPhone,jdbcType=VARCHAR},
+      cust_tel = #{record.custTel,jdbcType=VARCHAR},
+      cust_email = #{record.custEmail,jdbcType=VARCHAR},
+      business_license = #{record.businessLicense,jdbcType=VARCHAR},
+      business_license_pic = #{record.businessLicensePic,jdbcType=VARCHAR},
+      regist_address = #{record.registAddress,jdbcType=VARCHAR},
+      enter_attr = #{record.enterAttr,jdbcType=INTEGER},
+      enter_prod = #{record.enterProd,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huixin.web.model.Customer">
+    update customer
+    <set>
+      <if test="custCode != null">
+        cust_code = #{custCode,jdbcType=VARCHAR},
+      </if>
+      <if test="custName != null">
+        cust_name = #{custName,jdbcType=VARCHAR},
+      </if>
+      <if test="custType != null">
+        cust_type = #{custType,jdbcType=INTEGER},
+      </if>
+      <if test="custFullName != null">
+        cust_full_name = #{custFullName,jdbcType=VARCHAR},
+      </if>
+      <if test="custParentId != null">
+        cust_parent_id = #{custParentId,jdbcType=INTEGER},
+      </if>
+      <if test="areaId != null">
+        area_id = #{areaId,jdbcType=INTEGER},
+      </if>
+      <if test="custNote != null">
+        cust_note = #{custNote,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="custPhone != null">
+        cust_phone = #{custPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="custTel != null">
+        cust_tel = #{custTel,jdbcType=VARCHAR},
+      </if>
+      <if test="custEmail != null">
+        cust_email = #{custEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicense != null">
+        business_license = #{businessLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicensePic != null">
+        business_license_pic = #{businessLicensePic,jdbcType=VARCHAR},
+      </if>
+      <if test="registAddress != null">
+        regist_address = #{registAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="enterAttr != null">
+        enter_attr = #{enterAttr,jdbcType=INTEGER},
+      </if>
+      <if test="enterProd != null">
+        enter_prod = #{enterProd,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=BIT},
+      </if>
+    </set>
+    where cust_id = #{custId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huixin.web.model.Customer">
+    update customer
+    set cust_code = #{custCode,jdbcType=VARCHAR},
+      cust_name = #{custName,jdbcType=VARCHAR},
+      cust_type = #{custType,jdbcType=INTEGER},
+      cust_full_name = #{custFullName,jdbcType=VARCHAR},
+      cust_parent_id = #{custParentId,jdbcType=INTEGER},
+      area_id = #{areaId,jdbcType=INTEGER},
+      cust_note = #{custNote,jdbcType=VARCHAR},
+      real_name = #{realName,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      cust_phone = #{custPhone,jdbcType=VARCHAR},
+      cust_tel = #{custTel,jdbcType=VARCHAR},
+      cust_email = #{custEmail,jdbcType=VARCHAR},
+      business_license = #{businessLicense,jdbcType=VARCHAR},
+      business_license_pic = #{businessLicensePic,jdbcType=VARCHAR},
+      regist_address = #{registAddress,jdbcType=VARCHAR},
+      enter_attr = #{enterAttr,jdbcType=INTEGER},
+      enter_prod = #{enterProd,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIT}
+    where cust_id = #{custId,jdbcType=INTEGER}
+  </update> 
+  <!-- 分页条件查询 -->
+	<select id="selectCustByExampleAndPage" parameterType="com.huixin.web.model.Customer" resultMap="BaseResultMap">
+    	SELECT cust.cust_id,
+	       cust.cust_code,
+	       cust.cust_name,
+	       cust.cust_type,
+	       cust.status,
+	       area.area_name,
+	       case  when  dd.cust_id is not null or cc.cust_parent_id is not null then 0
+       		else 1 
+       		end as deleteFlag  
+	  FROM customer cust left join  area area 
+	  	on cust.area_id = area.area_id
+    	left join customer custParent 
+    	on custParent.cust_id = cust.cust_parent_id 
+    	left join (select distinct o.cust_id from order_info o) dd
+      	  on dd.cust_id= cust.cust_id
+      	LEFT JOIN (SELECT distinct c.cust_parent_id  FROM customer c where c.cust_type=2 and c.status!=3) cc
+          ON cc.cust_parent_id = cust.cust_id
+	  where cust.status != 3 
+        <if test="custCode != null and custCode != ''">
+            and cust.cust_code like CONCAT(CONCAT('%', #{custCode}), '%') 
+        </if>
+        <if test="custName != null and custName != ''">
+            and cust.cust_name  like CONCAT(CONCAT('%', #{custName}), '%')
+        </if>
+        <if test="areaId != null and areaId != ''">
+            and cust.area_id = #{areaId,jdbcType=INTEGER} 
+        </if>
+        <if test="custType != null ">
+            and cust.cust_type = #{custType,jdbcType=INTEGER} 
+        </if>
+        <if test="parentCustName != null and parentCustName != ''">
+            and custParent.cust_name = #{parentCustName,jdbcType=VARCHAR} 
+        </if>
+        <if test="status != null ">
+            and cust.status = #{status,jdbcType=INTEGER} 
+        </if>
+        
+        order by cust.update_time desc 
+    </select>
+</mapper>

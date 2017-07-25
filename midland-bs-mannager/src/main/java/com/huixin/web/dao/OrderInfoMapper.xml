@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huixin.web.dao.OrderInfoMapper" >
+  <resultMap id="OrderInfoMap" type="com.huixin.web.model.OrderInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+    <result column="cust_id" property="custId" jdbcType="INTEGER" />
+    <result column="order_status" property="orderStatus" jdbcType="INTEGER" />
+    <result column="pay_status" property="payStatus" jdbcType="INTEGER" />
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="consignee" property="consignee" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="district" property="district" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="tel" property="tel" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="postscript" property="postscript" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="shipper_code" property="shipperCode" jdbcType="VARCHAR" />
+    <result column="shipping_id" property="shippingId" jdbcType="INTEGER" />
+    <result column="shipper_sn" property="shipperSn" jdbcType="VARCHAR" />
+    <result column="buyer_message" property="buyerMessage" jdbcType="VARCHAR" />
+    <result column="pay_code" property="payCode" jdbcType="VARCHAR" />
+    <result column="inv_status" property="invStatus" jdbcType="INTEGER" />
+    <result column="inv_payee" property="invPayee" jdbcType="REAL" />
+    <result column="inv_content" property="invContent" jdbcType="VARCHAR" />
+    <result column="goods_amount" property="goodsAmount" jdbcType="INTEGER" />
+    <result column="shipping_fee" property="shippingFee" jdbcType="REAL" />
+    <result column="order_amount" property="orderAmount" jdbcType="REAL" />
+    <result column="discount" property="discount" jdbcType="REAL" />
+    <result column="money_paid" property="moneyPaid" jdbcType="REAL" />
+    <result column="sett_status" property="settStatus" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+ 
+ 
+  <resultMap id="OrderItemMap" type="com.huixin.web.model.OrderItem" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="prod_id" property="prodId" jdbcType="INTEGER" />
+    <result column="prod_code" property="prodCode" jdbcType="VARCHAR" />
+    <result column="prod_name" property="prodName" jdbcType="VARCHAR" />
+    <result column="market_price" property="marketPrice" jdbcType="REAL" />
+    <result column="sale_price" property="salePrice" jdbcType="REAL" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="is_gift" property="isGift" jdbcType="INTEGER" />
+  </resultMap>
+  
+  
+  
+  <resultMap id="OrderLogMap" type="com.huixin.web.model.OrderLog" >
+    <id column="log_id" property="logId" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="operate_user_code" property="operateUserCode" jdbcType="VARCHAR" />
+    <result column="operate_user_name" property="operateUserName" jdbcType="VARCHAR" />
+    <result column="operate_info" property="operateInfo" jdbcType="VARCHAR" />
+    <result column="operate_state" property="operateState" jdbcType="INTEGER" />
+    <result column="operate_time" property="operateTime" jdbcType="TIMESTAMP" />
+    <result column="operate_log_info" property="operateLogInfo" jdbcType="VARCHAR" />
+    <result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  
+   <resultMap id="OrderRemarkMap" type="com.huixin.web.model.OrderRemark" >
+	<id column="remark_uid" property="remarkUid" jdbcType="BIGINT" />
+	<result column="order_id" property="orderId" jdbcType="INTEGER" />
+	<result column="user_code" property="userCode" jdbcType="VARCHAR" />
+	<result column="user_name" property="userName" jdbcType="VARCHAR" />
+	<result column="remark_desc" property="remarkDesc" jdbcType="VARCHAR" />
+	<result column="remark_time" property="remarkTime" jdbcType="TIMESTAMP" />
+	<result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  
+  <sql id="Order_Column_List" >
+    id, order_sn, cust_id, order_status, pay_status, consignee, province, city, 
+    district, address, mobile, tel, email, postscript, shipping_id, pay_code, inv_status, 
+    inv_payee, inv_content, goods_amount, shipping_fee, order_amount, discount, money_paid, 
+    sett_status,
+    DATE_FORMAT(pay_time,'%Y-%m-%d %H:%i:%s') pay_time, 
+    DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') create_time, 
+    DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') update_time, 
+    num,shipper_code,buyer_message,shipping_sn 
+  </sql>
+  
+
+  <sql id="Item_Column_List" >
+    id, order_id, prod_id, prod_code, prod_name, market_price, sale_price,quantity, is_gift
+  </sql>
+
+
+  <sql id="Log_Column_List" >
+    log_id, order_id, operate_user_code, operate_user_name, operate_info, operate_state, 
+    operate_log_info, order_sn,
+    DATE_FORMAT(operate_time,'%Y-%m-%d %H:%i:%s') operate_time
+  </sql>
+
+
+  <sql id="Remark_Column_List" >
+    remark_uid, order_id, user_code, user_name, remark_desc , order_sn,
+    DATE_FORMAT(remark_time,'%Y-%m-%d %H:%i:%s') remark_time
+  </sql>
+  
+  
+	<select id="selectOrderInfoByEntity" resultMap="OrderInfoMap" parameterType="com.huixin.web.model.OrderInfo">
+		select c.cust_name ,a.id,a.order_sn,a.cust_id,a.order_status,a.pay_status,a.consignee,a.province,a.city,a.district,a.address,a.mobile,a.tel,a.email,a.postscript,a.shipping_id,a.pay_code,a.inv_status,a.inv_payee,a.inv_content,a.shipping_fee,a.order_amount,a.discount,a.money_paid,a.create_time,a.update_time,a.pay_time
+		from order_info a INNER JOIN customer c ON a.cust_id = c.cust_id    where a.cust_id in (SELECT  b.cust_id FROM `customer` b where b.cust_parent_id = #{custId}) and sett_status = 0 AND order_status in(2,3) 
+		
+		<!-- <if test="id != null">
+			and a.id = #{id}
+		</if>
+		<if test="orderSn != null and orderSn != ''">
+			and a.order_sn = #{orderSn}
+		</if>
+		<if test="custId != null and custId != ''">
+			and a.cust_id = #{custId}
+		</if>
+		<if test="orderStatus != null and orderStatus != ''">
+			and a.order_status = #{orderStatus}
+		</if>
+		<if test="payStatus != null">
+			and a.pay_status = #{payStatus}
+		</if>
+		<if test="consignee != null and consignee != ''">
+			and a.consignee = #{consignee}
+		</if>
+		<if test="province != null and province != ''">
+			and a.province = #{province}
+		</if>
+		<if test="city != null and city != ''">
+			and a.city = #{city}
+		</if>
+		<if test="district != null and district != ''">
+			and a.district = #{district}
+		</if>
+		<if test="address != null and address != ''">
+			and a.address = #{address}
+		</if>
+		<if test="mobile != null">
+			and a.mobile = #{mobile}
+		</if>
+		<if test="tel != null and tel != ''">
+			and a.tel = #{tel}
+		</if>
+		<if test="email != null and email != ''">
+			and a.email = #{email}
+		</if>
+		<if test="postscript != null and postscript != ''">
+			and a.postscript = #{postscript}
+		</if>
+		<if test="shippingId != null and shippingId != ''">
+			and a.shipping_id = #{shippingId}
+		</if>
+		<if test="payCode != null and payCode != ''">
+			and a.pay_code = #{payCode}
+		</if>
+		<if test="invStatus != null and invStatus != ''">
+			and a.inv_status = #{invStatus}
+		</if>
+		<if test="invPayee != null and invPayee != ''">
+			and a.inv_payee = #{invPayee}
+		</if>
+		<if test="invContent != null and invContent != ''">
+			and a.inv_content = #{invContent}
+		</if>
+		<if test="goodsAmount != null and goodsAmount != ''">
+			and a.goods_amount = #{goodsAmount}
+		</if>
+		<if test="shippingFee != null and shippingFee != ''">
+			and a.shipping_fee = #{shippingFee}
+		</if>
+		<if test="orderAmount != null and orderAmount != ''">
+			and a.order_amount = #{orderAmount}
+		</if>
+		<if test="discount != null and discount != ''">
+			and a.discount = #{discount}
+		</if>
+		<if test="moneyPaid != null and moneyPaid != ''">
+			and a.money_paid = #{moneyPaid}
+		</if>
+		<if test="createTime != null and createTime != ''">
+			and a.create_time = #{createTime}
+		</if>
+		<if test="updateTime != null and updateTime != ''">
+			and a.update_time = #{updateTime}
+		</if> -->
+		<if test="betweenTimeStart != null and betweenTimeStart != '' and betweenTimeEnd != null and betweenTimeEnd != ''  ">
+			and a.pay_time BETWEEN #{betweenTimeStart} and #{betweenTimeEnd}
+		</if>
+	</select>
+	
+	<select id="selectOrderAmountCount" resultType="java.lang.Double" parameterType="com.huixin.web.model.OrderInfo">
+			select SUM(a.order_amount) AS orderAmountCount
+		from order_info a INNER JOIN customer c ON a.cust_id = c.cust_id    where a.cust_id in (SELECT  b.cust_id FROM `customer` b where b.cust_parent_id = #{custId}) AND sett_status = 0 AND order_status in(2,3)
+		<if test="betweenTimeStart != null and betweenTimeStart != '' and betweenTimeEnd != null and betweenTimeEnd != ''  ">
+			and a.pay_time BETWEEN #{betweenTimeStart} and #{betweenTimeEnd}
+		</if>
+	</select>
+	
+	<update id="updatesettStatus" parameterType="map">
+		UPDATE order_info SET sett_status = 1   WHERE id IN(SELECT order_id from settlement_item WHERE sett_id = #{id}); 
+	</update>
+	
+	<select id="selectorderDetails"  resultMap="OrderInfoMap" parameterType="com.huixin.web.model.Settlement">
+	SELECT b.cust_name,a.id,a.order_sn,a.cust_id,a.order_status,a.pay_status,a.consignee,a.province,a.city,a.district,a.address,a.mobile,a.tel,a.email,a.postscript,a.shipping_id,a.pay_code,a.inv_status,a.inv_payee,a.inv_content,a.shipping_fee,a.order_amount,a.discount,a.money_paid,a.create_time,a.update_time,a.pay_time
+	 FROM order_info a INNER JOIN customer b on a.cust_id = b.cust_id where id in(SELECT order_id from settlement_item where sett_id = #{id})
+	</select>
+  
+  
+
+  
+  <select id="queryOrderInfoList" resultType="com.huixin.web.model.OrderInfo" parameterType="com.huixin.web.model.OrderInfo" >
+    SELECT
+		o.id id,
+		o.order_sn orderSn,
+		o.cust_id custId,
+		o.order_status orderStatus,
+		o.pay_status payStatus,
+		o.consignee consignee,
+		o.province province,
+		o.city city,
+		o.district district,
+		o.address address,
+		o.mobile mobile,
+		o.tel tel,
+		o.email email,
+		o.postscript postscript,
+		o.shipping_id shippingId,
+		o.pay_code payCode,
+		o.inv_status invStatus,
+		o.inv_payee invPayee,
+		o.inv_content invContent,
+		o.goods_amount goodsAmount,
+		o.shipping_fee shippingFee,
+		o.order_amount orderAmount,
+		o.discount discount,
+		o.money_paid moneyPaid,
+		o.sett_status settStatus,
+		DATE_FORMAT(o.pay_time,'%Y-%m-%d %H:%i:%s') payTime,
+		DATE_FORMAT(o.create_time,'%Y-%m-%d %H:%i:%s') createTime,
+		DATE_FORMAT(o.update_time,'%Y-%m-%d %H:%i:%s') updateTime,
+		o.num num,
+		o.shipper_code shipperCode,
+		o.buyer_message buyerMessage,
+		o.shipping_sn  shippingSn,
+	  	c.cust_name custName,
+	  	c.cust_type custType
+	FROM
+		order_info o 
+	LEFT JOIN customer c  on o.cust_id = c.cust_id
+	WHERE  1 = 1 
+	 <if test="shipperCode != null" >
+      		AND o.shipper_code = #{shipperCode,jdbcType=VARCHAR} 
+   	 </if>
+      <if test="payStatus != null" >
+       		AND o.pay_status = #{payStatus,jdbcType=INTEGER}
+      </if>
+      <if test="orderStatus != null" >
+        	AND o.order_status = #{orderStatus,jdbcType=INTEGER}
+      </if>
+      <if test="custId != null" >
+        	AND o.cust_id = #{custId,jdbcType=INTEGER}
+      </if>
+       <if test="flag != null" >
+	        <choose>
+	        	<when test="flag =='-1' || flag ==-1">
+	        			AND	 o.pay_status  =  0
+	        			AND  o.order_status <![CDATA[>= ]]> 0
+	        	</when>
+	        	<otherwise>
+	        			AND	 o.pay_status  =  1
+						AND	 o.order_status  =  #{flag,jdbcType=INTEGER} 
+	        	</otherwise>
+	        </choose>
+     </if>
+      
+       <if test="custName != null  and custName != ''" >
+        	AND c.cust_Name like  concat(concat('%',#{custName,jdbcType=VARCHAR}),'%') 
+      </if>
+       <if test="payCode != null  and payCode != ''" >
+       		AND o.pay_code like  concat('%',#{payCode,jdbcType=VARCHAR})
+      </if>
+	  <if test="orderSn != null and orderSn != ''" >
+        	AND o.order_sn like  concat(concat('%',#{orderSn,jdbcType=VARCHAR}),'%') 
+      </if>
+       <if test="consignee != null and consignee != ''" >
+       	 	AND o.consignee like  concat(concat('%',#{consignee,jdbcType=VARCHAR}),'%') 
+      </if>
+	  <if test="createStartTime != null and createStartTime !=''">
+			AND o.create_time<![CDATA[>=]]> #{createStartTime,jdbcType=TIMESTAMP}
+	  </if>
+	  <if test="createEndTime != null and createEndTime !=''">
+			AND o.create_time<![CDATA[<=]]> #{createEndTime,jdbcType=TIMESTAMP}
+	  </if>
+	  <if test="payStartTime != null and payStartTime !=''">
+			AND o.pay_time<![CDATA[>=]]> #{payStartTime,jdbcType=TIMESTAMP}
+	  </if>
+	  <if test="payEndTime != null and payEndTime !=''">
+			AND o.pay_time<![CDATA[<=]]> #{payEndTime,jdbcType=TIMESTAMP}
+	  </if>
+	  order by  o.create_time desc
+  </select>
+  
+  <select id="queryOrderInfoObj" resultType="com.huixin.web.model.OrderInfo" parameterType="com.huixin.web.model.OrderInfo" >
+       SELECT
+		o.id id,
+		o.order_sn orderSn,
+		o.cust_id custId,
+		o.order_status orderStatus,
+		o.pay_status payStatus,
+		o.consignee consignee,
+		o.province province,
+		o.city city,
+		o.district district,
+		(select region_name from region where region_id =o.province) provinceName,
+		(select region_name from region where region_id =o.city )cityName,
+		(select region_name from region where region_id =o.district) distName,
+		o.address address,
+		o.mobile mobile,
+		o.tel tel,
+		o.email email,
+		o.postscript postscript,
+		o.shipping_id shippingId,
+		o.pay_code payCode,
+		o.inv_status invStatus,
+		o.inv_payee invPayee,
+		o.inv_content invContent,
+		o.goods_amount goodsAmount,
+		o.shipping_fee shippingFee,
+		o.order_amount orderAmount,
+		o.discount discount,
+		o.money_paid moneyPaid,
+		o.sett_status settStatus,
+		DATE_FORMAT(o.pay_time,'%Y-%m-%d %H:%i:%s') payTime,
+		DATE_FORMAT(o.create_time,'%Y-%m-%d %H:%i:%s') createTime,
+		DATE_FORMAT(o.update_time,'%Y-%m-%d %H:%i:%s') updateTime,
+		o.num num,
+		o.shipper_code shipperCode,
+		o.buyer_message buyerMessage,
+		o.shipping_sn  shippingSn,
+	  	c.cust_name custName,
+	  	c.cust_type custType,
+	  	c.cust_code custCode,
+		s.shipping_name   shippingName
+	FROM
+		order_info o 
+	LEFT JOIN customer c  on o.cust_id = c.cust_id
+	LEFT JOIN shipping s  on s.shipping_id = o.shipping_id
+	WHERE  o.id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  
+  <insert id="addOrderInfoObj" parameterType="com.huixin.web.model.OrderInfo"  useGeneratedKeys="true" keyProperty="id">
+    insert into order_info (id, order_sn, cust_id, 
+      order_status, pay_status, pay_time, 
+      consignee, province, city, 
+      district, address, mobile, 
+      tel, email, postscript, 
+      shipping_id, pay_code, inv_status, 
+      inv_payee, inv_content, goods_amount, 
+      shipping_fee, order_amount, discount, 
+      money_paid, sett_status, create_time, 
+      update_time,num,shipper_code,buyer_message,shipping_sn)
+    values (#{id,jdbcType=INTEGER}, #{orderSn,jdbcType=VARCHAR}, #{custId,jdbcType=INTEGER}, 
+      #{orderStatus,jdbcType=INTEGER}, #{payStatus,jdbcType=INTEGER}, #{payTime,jdbcType=TIMESTAMP}, 
+      #{consignee,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
+      #{district,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{postscript,jdbcType=VARCHAR}, 
+      #{shippingId,jdbcType=INTEGER}, #{payCode,jdbcType=VARCHAR}, #{invStatus,jdbcType=INTEGER}, 
+      #{invPayee,jdbcType=REAL}, #{invContent,jdbcType=VARCHAR}, #{goodsAmount,jdbcType=INTEGER}, 
+      #{shippingFee,jdbcType=REAL}, #{orderAmount,jdbcType=REAL}, #{discount,jdbcType=REAL}, 
+      #{moneyPaid,jdbcType=REAL}, #{settStatus,jdbcType=INTEGER},  #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP},#{num,jdbcType=INTEGER},#{shipperCode,jdbcType=VARCHAR},
+      #{buyerMessage,jdbcType=VARCHAR},#{shippingSn,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+ 
+  <update id="updateOrderInfoObj" parameterType="com.huixin.web.model.OrderInfo" >
+    update order_info
+    <set >
+      <if test="orderStatus != null" >
+        order_status = #{orderStatus,jdbcType=INTEGER},
+      </if>
+      <if test="payStatus != null" >
+        pay_status = #{payStatus,jdbcType=INTEGER},
+      </if>
+      <if test="payTime != null" >
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="consignee != null" >
+        consignee = #{consignee,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null" >
+        district = #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null" >
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="postscript != null" >
+        postscript = #{postscript,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingId != null" >
+        shipping_id = #{shippingId,jdbcType=INTEGER},
+      </if>
+      <if test="payCode != null" >
+        pay_code = #{payCode,jdbcType=VARCHAR},
+      </if>
+      <if test="invStatus != null" >
+        inv_status = #{invStatus,jdbcType=INTEGER},
+      </if>
+      <if test="invPayee != null" >
+        inv_payee = #{invPayee,jdbcType=REAL},
+      </if>
+      <if test="invContent != null" >
+        inv_content = #{invContent,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsAmount != null" >
+        goods_amount = #{goodsAmount,jdbcType=INTEGER},
+      </if>
+      <if test="shippingFee != null" >
+        shipping_fee = #{shippingFee,jdbcType=REAL},
+      </if>
+      <if test="orderAmount != null" >
+        order_amount = #{orderAmount,jdbcType=REAL},
+      </if>
+      <if test="discount != null" >
+        discount = #{discount,jdbcType=REAL},
+      </if>
+      <if test="moneyPaid != null" >
+        money_paid = #{moneyPaid,jdbcType=REAL},
+      </if>
+      <if test="settStatus != null" >
+        sett_status = #{settStatus,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="1==1" >
+        update_time = CURRENT_TIMESTAMP,
+      </if>
+      <if test="num != null" >
+        num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="shipperCode != null" >
+        shipper_code = #{shipperCode,jdbcType=VARCHAR},
+      </if>
+       <if test="buyerMessage != null" >
+        buyer_message = #{buyerMessage,jdbcType=VARCHAR},
+      </if>
+       <if test="shippingSn != null" >
+        shipping_sn  = #{shippingSn,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+    <insert id="addOrderItemObj" parameterType="com.huixin.web.model.OrderItem" >
+    insert into order_item (id, order_id, prod_id, 
+      prod_code, prod_name, market_price, 
+      sale_price, quantity, 
+      is_gift)
+    values (#{id,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{prodId,jdbcType=INTEGER}, 
+      #{prodCode,jdbcType=VARCHAR}, #{prodName,jdbcType=VARCHAR}, #{marketPrice,jdbcType=REAL}, 
+      #{salePrice,jdbcType=REAL},  #{quantity,jdbcType=INTEGER}, 
+      #{isGift,jdbcType=INTEGER})
+  </insert>
+  
+  
+  
+  <select id="queryOrderItemList" resultMap="OrderItemMap" parameterType="com.huixin.web.model.OrderInfo" >
+    select 
+    <include refid="Item_Column_List" />
+    from order_item
+    where order_id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  
+  
+  
+  
+    <insert id="addLogObj" parameterType="com.huixin.web.model.OrderLog" >
+    insert into order_log (log_id, order_id, operate_user_code, 
+      operate_user_name, operate_info, operate_state, 
+      operate_time, operate_log_info, order_sn
+      )
+    values (#{logId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{operateUserCode,jdbcType=VARCHAR}, 
+      #{operateUserName,jdbcType=VARCHAR}, #{operateInfo,jdbcType=VARCHAR}, #{operateState,jdbcType=INTEGER}, 
+      #{operateTime,jdbcType=TIMESTAMP}, #{operateLogInfo,jdbcType=VARCHAR}, #{orderSn,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  
+   <select id="queryLogList" resultMap="OrderLogMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Log_Column_List" />
+    from order_log
+  	where order_id = #{orderId,jdbcType=BIGINT}
+      order by operate_time desc
+  </select>
+  
+    <insert id="addRemarkObj" parameterType="com.huixin.web.model.OrderRemark" >
+    insert into order_remark (remark_uid, order_id, user_code, 
+      user_name, remark_desc, remark_time, 
+      order_sn)
+    values (#{remarkUid,jdbcType=BIGINT}, #{orderId,jdbcType=INTEGER}, #{userCode,jdbcType=VARCHAR}, 
+      #{userName,jdbcType=VARCHAR}, #{remarkDesc,jdbcType=VARCHAR}, #{remarkTime,jdbcType=TIMESTAMP}, 
+      #{orderSn,jdbcType=VARCHAR})
+  </insert>
+  
+  
+  <select id="queryRemarkList" resultMap="OrderRemarkMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Remark_Column_List" />
+    from order_remark
+   where order_id = #{orderId,jdbcType=BIGINT}
+      order by remark_time desc
+  </select>
+  
+  <!-- 定时任务 支付超时 关闭订单 -->
+  <update id="changeOrderStatus">
+   	update order_info set order_status = -1  
+   		where  HOUR( timediff( now(), create_time) ) <![CDATA[>]]> 72 and  pay_status = 0
+  </update>
+ 
+  <!-- 定时任务 超时自动收货 -->
+  <update id="changeOrderComplete">
+   	update order_info set order_status = 3 
+   		where  hour( timediff(now(), delivery_time) ) > 360
+   			and  pay_status = 1
+   			and  order_status = 2 
+  </update>
+ 
+ 
+  <select id="queryShippingList" resultType="com.huixin.web.model.Shipping" >
+    select
+   shipping_id shippingId,
+   shipping_code shippingCode,
+   shipping_name shippingName,
+   shipping_desc shippingDesc,
+   model_img modelImg,
+   defalut_delivery defalutDelivery, 
+   sort_order sortOrder, 
+   regular regular,
+   enabled enabled,
+   modified modified,
+   shipping_print shippingPrint,
+   shipping_print2 shippingPrint2
+    from shipping
+  </select>
+ 
+ 
+</mapper>

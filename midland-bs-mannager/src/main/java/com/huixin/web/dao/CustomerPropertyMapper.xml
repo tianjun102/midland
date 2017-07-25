@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huixin.web.dao.CustomerPropertyMapper" >
+  <resultMap id="BaseResultMap" type="com.huixin.web.model.CustomerProperty" >
+    <id column="prop_id" property="propId" jdbcType="INTEGER" />
+    <result column="prop_type" property="propType" jdbcType="BIT" />
+    <result column="prop_name" property="propName" jdbcType="VARCHAR" />
+    <result column="prop_values" property="propValues" jdbcType="VARCHAR" />
+    <result column="is_show" property="isShow" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    prop_id, prop_type, prop_name, prop_values, is_show
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.huixin.web.model.CustomerPropertyExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from customer_property
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from customer_property
+    where prop_id = #{propId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from customer_property
+    where prop_id = #{propId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.huixin.web.model.CustomerPropertyExample" >
+    delete from customer_property
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.huixin.web.model.CustomerProperty" >
+    insert into customer_property (prop_id, prop_type, prop_name, 
+      prop_values, is_show)
+    values (#{propId,jdbcType=INTEGER}, #{propType,jdbcType=BIT}, #{propName,jdbcType=VARCHAR}, 
+      #{propValues,jdbcType=VARCHAR}, #{isShow,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.huixin.web.model.CustomerProperty" >
+    insert into customer_property
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="propId != null" >
+        prop_id,
+      </if>
+      <if test="propType != null" >
+        prop_type,
+      </if>
+      <if test="propName != null" >
+        prop_name,
+      </if>
+      <if test="propValues != null" >
+        prop_values,
+      </if>
+      <if test="isShow != null" >
+        is_show,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="propId != null" >
+        #{propId,jdbcType=INTEGER},
+      </if>
+      <if test="propType != null" >
+        #{propType,jdbcType=BIT},
+      </if>
+      <if test="propName != null" >
+        #{propName,jdbcType=VARCHAR},
+      </if>
+      <if test="propValues != null" >
+        #{propValues,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        #{isShow,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.huixin.web.model.CustomerPropertyExample" resultType="java.lang.Integer" >
+    select count(*) from customer_property
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update customer_property
+    <set >
+      <if test="record.propId != null" >
+        prop_id = #{record.propId,jdbcType=INTEGER},
+      </if>
+      <if test="record.propType != null" >
+        prop_type = #{record.propType,jdbcType=BIT},
+      </if>
+      <if test="record.propName != null" >
+        prop_name = #{record.propName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.propValues != null" >
+        prop_values = #{record.propValues,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isShow != null" >
+        is_show = #{record.isShow,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update customer_property
+    set prop_id = #{record.propId,jdbcType=INTEGER},
+      prop_type = #{record.propType,jdbcType=BIT},
+      prop_name = #{record.propName,jdbcType=VARCHAR},
+      prop_values = #{record.propValues,jdbcType=VARCHAR},
+      is_show = #{record.isShow,jdbcType=BIT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.huixin.web.model.CustomerProperty" >
+    update customer_property
+    <set >
+      <if test="propType != null" >
+        prop_type = #{propType,jdbcType=BIT},
+      </if>
+      <if test="propName != null" >
+        prop_name = #{propName,jdbcType=VARCHAR},
+      </if>
+      <if test="propValues != null" >
+        prop_values = #{propValues,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null" >
+        is_show = #{isShow,jdbcType=BIT},
+      </if>
+    </set>
+    where prop_id = #{propId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.huixin.web.model.CustomerProperty" >
+    update customer_property
+    set prop_type = #{propType,jdbcType=BIT},
+      prop_name = #{propName,jdbcType=VARCHAR},
+      prop_values = #{propValues,jdbcType=VARCHAR},
+      is_show = #{isShow,jdbcType=BIT}
+    where prop_id = #{propId,jdbcType=INTEGER}
+  </update>
+  
+   <!-- 批量新增用户角色关系 -->
+   <insert id="insertBatch"  parameterType="java.util.List"> 
+        insert into customer_property ( prop_type, prop_name,prop_values, is_show)   
+        values  
+        <foreach collection="list" item="item" index="index" separator="," >  
+            (#{item.propType,jdbcType=BIGINT},
+            #{item.propName,jdbcType=VARCHAR},
+            #{item.propValues,jdbcType=VARCHAR},
+            #{item.isShow,jdbcType=BIGINT}) 
+        </foreach>  
+   </insert>
+</mapper>

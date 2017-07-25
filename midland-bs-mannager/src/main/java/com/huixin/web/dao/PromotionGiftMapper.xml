@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huixin.web.dao.PromotionGiftMapper">
+    <resultMap id="BaseResultMap" type="com.huixin.web.model.PromotionGift">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="prom_id" property="prom_id" jdbcType="INTEGER" />
+        <result column="prod_id" property="prod_id" jdbcType="INTEGER" />
+        <result column="prod_code" property="prod_code" jdbcType="VARCHAR" />
+        <result column="prod_name" property="prod_name" jdbcType="VARCHAR" />
+        <result column="prod_number" property="prod_number" jdbcType="INTEGER" />
+        <result column="prod_price" property="prod_price" jdbcType="DECIMAL" />
+    </resultMap>
+    
+	<sql id="Base_Column_List" >
+		id,prom_id,prod_id,prod_code,prod_name,prod_number,prod_price
+	</sql>
+	
+    
+    <select id="selectPromotionGiftByParem" resultMap="BaseResultMap" parameterType="com.huixin.web.model.PromotionGift">
+      select id,prom_id,prod_id,prod_code,prod_name,prod_number,prod_price from promotion_gift a where 1=1
+	       <if test="classId != null">
+	       		and a.id = #{id}
+	       </if>
+	       <if test="prom_id != null">
+	      		and a.prom_id = #{prom_id}
+	       </if>
+	       <if test="prod_id != null">
+	      		and a.prod_id = #{prod_id}
+	       </if>
+	       <if test="prod_code != null">
+	      		and a.prod_code = #{prod_code}
+	       </if>
+	       <if test="prod_name != null">
+	      		and a.prod_name = #{prod_name}
+	       </if>
+	       <if test="prod_number != null">
+	      		and a.prod_number = #{prod_number}
+	       </if>
+	       <if test="prod_price != null">
+	      		and a.prod_price = #{prod_price}
+	       </if>
+    </select>
+    
+    
+    <select id="selectPromotionGiftByEntity" resultMap="BaseResultMap" parameterType="com.huixin.web.model.PromotionGift">
+      select id,prom_id,prod_id,prod_code,prod_name,prod_number,prod_price from promotion_gift a where 1=1
+	       <if test="classId != null">
+	       		and a.id = #{id}
+	       </if>
+	       <if test="prom_id != null">
+	      		and a.prom_id = #{prom_id}
+	       </if>
+	       <if test="prod_id != null">
+	      		and a.prod_id = #{prod_id}
+	       </if>
+	       <if test="prod_code != null">
+	      		and a.prod_code = #{prod_code}
+	       </if>
+	       <if test="prod_name != null">
+	      		and a.prod_name like CONCAT(CONCAT('%', #{prod_name}), '%')
+	       </if>
+	       <if test="prod_number != null">
+	      		and a.prod_number = #{prod_number}
+	       </if>
+	       <if test="prod_price != null">
+	      		and a.prod_price = #{prod_price}
+	       </if>
+    </select>
+    
+    <select id="selectPromotionGiftByPromId" resultMap="BaseResultMap" parameterType="map">
+      select id,prom_id,prod_id,prod_code,prod_name,prod_number,prod_price from promotion_gift a where prom_id = #{prom_id}
+    </select>
+    
+    <select id="selectPromotionGiftById" resultMap="BaseResultMap" parameterType="com.huixin.web.model.PromotionGift" >
+          select id,prom_id,prod_id,prod_code,prod_name,prod_number,prod_price from promotion_gift a where id = #{id}
+    </select>
+    
+    <select id="selectidListGiftById" resultMap="BaseResultMap" parameterType="map" >
+          select id from promotion_gift a where prom_id = #{prom_id} and id not in
+          	     <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    
+    <insert id="insetPromotionGift" parameterType="com.huixin.web.model.PromotionGift">
+    insert into promotion_gift a
+	     <trim prefix="(" suffix=")" suffixOverrides="," >
+	       <if test="id != null">
+	       		 a.id,
+	       </if>
+	       <if test="prom_id != null">
+	      		 a.prom_id,
+	       </if>
+	       <if test="prod_id != null">
+	      		 a.prod_id,
+	       </if>
+	       <if test="prod_code != null">
+	      		 a.prod_code,
+	       </if>
+	       <if test="prod_name != null">
+	      		 a.prod_nam,
+	       </if>
+	       <if test="prod_number != null">
+	      		 a.prod_number,
+	       </if>
+	       <if test="prod_price != null">
+	      		 a.prod_price
+	       </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	       <if test="id != null">
+	       		#{id},
+	       </if>
+	       <if test="prom_id != null">
+	      		#{prom_id},
+	       </if>
+	       <if test="prod_id != null">
+	      		#{prod_id},
+	       </if>
+	       <if test="prod_code != null">
+	      		#{prod_code},
+	       </if>
+	       <if test="prod_name != null">
+	      		#{prod_name},
+	       </if>
+	       <if test="prod_number != null">
+	      		#{prod_number},
+	       </if>
+	       <if test="prod_price != null">
+	      		#{prod_price}
+	       </if>
+	    </trim>
+    </insert>
+    
+    <insert id="batchInsert" useGeneratedKeys="true" parameterType="java.util.List">
+		insert into
+		promotion_gift
+		(id, prom_id, prod_id,
+		prod_code, prod_name, prod_number,
+		prod_price
+		)
+		values
+		<foreach collection="list" item="ts" index="index" separator=",">
+			(#{ts.id}, #{ts.prom_id},
+			#{ts.prod_id},
+			#{ts.prod_code}, #{ts.prod_name}, #{ts.prod_number},
+			#{ts.prod_price}
+			)
+		</foreach>
+	</insert>
+    
+    <delete id="batchDeletePromotionGift" parameterType="java.util.List">
+    delete from promotion_gift
+	    where id in 
+	     <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+
+    </delete>
+    
+    <delete id="deletePromotionGift" parameterType="com.huixin.web.model.PromotionGift">
+    delete from promotion_gift
+	    where 
+	    <if test="id != null">
+	    	id = #{id}
+	    </if>
+	    <if test="prom_id != null">
+	    	prom_id = #{prom_id}
+	    </if>
+    </delete>
+    
+    <update id="updatePromotionGiftById" parameterType="com.huixin.web.model.PromotionGift" >
+    update promotion_gift a 
+	    <set>
+	       <if test="id != null">
+	       		 a.id = #{id},
+	       </if>
+	       <if test="prom_id != null">
+	      		 a.prom_id = #{prom_id},
+	       </if>
+	       <if test="prod_id != null">
+	      		 a.prod_id = #{prod_id},
+	       </if>
+	       <if test="prod_code != null">
+	      		 a.prod_code = #{prod_code},
+	       </if>
+	       <if test="prod_name != null">
+	      		 a.prod_name = #{prod_name},
+	       </if>
+	       <if test="prod_number != null">
+	      		 a.prod_number = #{prod_number},
+	       </if>
+	       <if test="prod_price != null">
+	      		 a.prod_price = #{prod_price}
+	       </if>
+	    </set>
+	    where a.id = #{id}
+    </update>
+    
+  <update id="batchUpdate" parameterType="java.util.List">
+ 	 <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+	    update promotion_gift
+	    <set>
+	      <if test="item.id != null" >
+	        id = #{item.id},
+	      </if>
+	      <if test="item.prom_id != null" >
+	        prom_id = #{item.prom_id},
+	      </if>
+	      <if test="item.prod_id  != null" >
+	        prod_id  = #{item.prod_id },
+	      </if>
+	      <if test="item.prod_code != null" >
+	        prod_code = #{item.prod_code},
+	      </if>
+	      <if test="item.prod_name != null" >
+	        prod_name = #{item.prod_name},
+	      </if>
+	      <if test="item.prod_number != null" >
+	        prod_number = #{item.prod_number},
+	      </if>
+	      <if test="item.prod_price != null" >
+	        prod_price = #{item.prod_price},
+	      </if>
+	    </set>
+	    where  id = #{item.id}
+    </foreach>
+  </update>
+    
+    
+    
+
+</mapper>

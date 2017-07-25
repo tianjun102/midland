@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huixin.web.dao.MenuMapper">
+    <resultMap id="BaseResultMap" type="com.huixin.web.model.Menu">
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="parentId" property="parentId" jdbcType="VARCHAR" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="icon" property="icon" jdbcType="VARCHAR" />
+        <result column="order" property="order" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <select id="selectById" resultMap="BaseResultMap">
+      select * from jrbac_menu
+    </select>
+
+</mapper>

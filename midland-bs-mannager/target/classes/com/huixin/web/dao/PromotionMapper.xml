@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huixin.web.dao.PromotionMapper">
+    <resultMap id="BaseResultMap" type="com.huixin.web.model.Promotion">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="prom_sn" property="prom_sn" jdbcType="VARCHAR" />
+        <result column="prom_name" property="prom_name" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="is_mutex" property="is_mutex" jdbcType="INTEGER" />
+        <result column="is_confirm" property="is_confirm" jdbcType="INTEGER" />
+        <result column="prom_start" property="prom_start" jdbcType="TIMESTAMP" />
+        <result column="prom_end" property="prom_end" jdbcType="TIMESTAMP" />
+        <result column="prom_order_amount" property="prom_order_amount" jdbcType="BIGINT" />
+        <result column="creat_time" property="creat_time" jdbcType="TIMESTAMP" />
+        <result column="confirm_time" property="confirm_time" jdbcType="TIMESTAMP" />
+        <result column="enabled" property="enabled" jdbcType="INTEGER" />
+        <result column="update_time" property="update_time" jdbcType="TIMESTAMP" />
+    </resultMap>
+    
+	<sql id="Base_Column_List" >
+		id,prom_sn,type,is_mutex,is_confirm,
+		DATE_FORMAT(prom_start,'%Y-%m-%d %H:%i:%s') prom_start,
+		DATE_FORMAT(prom_end,'%Y-%m-%d %H:%i:%s') prom_end,
+		prom_order_amount,
+		DATE_FORMAT(creat_time,'%Y-%m-%d %H:%i:%s') creat_time,
+		DATE_FORMAT(confirm_time,'%Y-%m-%d %H:%i:%s') confirm_time,
+		enabled,
+		DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') update_time
+	</sql>
+	
+    
+    <select id="selectPromotionByParem" resultMap="BaseResultMap" parameterType="com.huixin.web.model.Promotion">
+			select id,prom_sn,prom_name,type,is_mutex,is_confirm,
+			DATE_FORMAT(prom_start,'%Y-%m-%d %H:%i:%s') prom_start,
+			DATE_FORMAT(prom_end,'%Y-%m-%d %H:%i:%s') prom_end,
+			prom_order_amount,
+			DATE_FORMAT(creat_time,'%Y-%m-%d %H:%i:%s') creat_time,
+			DATE_FORMAT(confirm_time,'%Y-%m-%d %H:%i:%s') confirm_time,
+			enabled,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') update_time 
+			from promotion a
+			 where 1=1
+	       <if test="id != null">
+	       		and a.id = #{id}
+	       </if>
+	       <if test="prom_sn != null and prom_sn != ''">
+	      		and a.prom_sn = #{prom_sn}
+	       </if>
+	       <if test="prom_name != null and prom_name != ''">
+	      		and a.prom_name = #{prom_name}
+	       </if>
+	       <if test="type != null and type != ''">
+	      		and a.type = #{type}
+	       </if>
+	       <if test="is_mutex != null">
+	      		and a.is_mutex = #{is_mutex}
+	       </if>
+	       <if test="prom_start != null and prom_start != ''">
+	      		and a.prom_start = #{prom_start}
+	       </if>
+	       <if test="prom_end != null and prom_end != ''">
+	      		and a.prom_end = #{prom_end}
+	       </if>
+	       <if test="prom_order_amount != null and prom_order_amount != ''">
+	      		and a.prom_order_amount = #{prom_order_amount}
+	       </if>
+	       <if test="creat_time != null and creat_time != ''">
+	      		and a.creat_time = #{creat_time}
+	       </if>
+	       <if test="confirm_time != null and confirm_time != ''">
+	      		and a.confirm_time = #{confirm_time}
+	       </if>
+	       <if test="enabled != null">
+	      		and a.enabled = #{enabled}
+	       </if>
+	       <if test="update_time != null and update_time != ''">
+	      		and a.update_time = #{update_time}
+	       </if>
+    </select>
+    
+    
+    <select id="selectPromotionByEntity" resultMap="BaseResultMap" parameterType="com.huixin.web.model.Promotion">
+     select id,prom_sn,prom_name,type,is_mutex,is_confirm,
+     	DATE_FORMAT(prom_start,'%Y-%m-%d %H:%i:%s') prom_start,
+		DATE_FORMAT(prom_end,'%Y-%m-%d %H:%i:%s') prom_end,
+		prom_order_amount,
+     	DATE_FORMAT(creat_time,'%Y-%m-%d %H:%i:%s') creat_time,
+		DATE_FORMAT(confirm_time,'%Y-%m-%d %H:%i:%s') confirm_time,
+		enabled,
+		DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') update_time
+      from promotion a where 1=1
+	       <if test="id != null and id != ''">
+	       		and a.id = #{id}
+	       </if>
+	       <if test="prom_sn != null and prom_sn != ''">
+	      		and a.prom_sn = #{prom_sn}
+	       </if>
+	       <if test="prom_name != null and prom_name != ''">
+	      		and a.prom_name like CONCAT(CONCAT('%', #{prom_name}), '%')
+	       </if>
+	       <if test="type != null">
+	      		and a.type = #{type}
+	       </if>
+	       <if test="is_mutex != null">
+	      		and a.is_mutex = #{is_mutex}
+	       </if>
+	       <if test="prom_start != null and prom_start != ''">
+	      		and a.prom_start <![CDATA[>=]]> #{prom_start}
+	       </if>
+	       <if test="prom_end != null and prom_end != ''">
+	      		and a.prom_end <![CDATA[<=]]> #{prom_end}
+	       </if>
+	       <if test="prom_order_amount != null and prom_order_amount != ''">
+	      		and a.prom_order_amount = #{prom_order_amount}
+	       </if>
+	       <if test="creat_time != null and creat_time != ''">
+	      		and a.creat_time = #{creat_time}
+	       </if>
+	       <if test="confirm_time != null and confirm_time != ''">
+	      		and a.confirm_time = #{confirm_time}
+	       </if>
+	       <if test="enabled != null">
+	      		and a.enabled = #{enabled}
+	       </if>
+	       <if test="update_time != null and update_time != ''">
+	      		and a.update_time = #{update_time}
+	       </if>
+    </select>
+    
+    <select id="selectPromotionById" resultMap="BaseResultMap" parameterType="com.huixin.web.model.Promotion" >
+          select 
+	      	id,prom_sn,prom_name,type,is_mutex,is_confirm,
+	      	DATE_FORMAT(prom_start,'%Y-%m-%d %H:%i:%s') prom_start,
+			DATE_FORMAT(prom_end,'%Y-%m-%d %H:%i:%s') prom_end,
+			prom_order_amount,
+	      	DATE_FORMAT(creat_time,'%Y-%m-%d %H:%i:%s') creat_time,
+			DATE_FORMAT(confirm_time,'%Y-%m-%d %H:%i:%s') confirm_time,
+			enabled,
+			DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') update_time
+	       from promotion where id = #{id}
+    </select>
+    
+    <insert id="insetPromotion" parameterType="com.huixin.web.model.Class" useGeneratedKeys="true" keyProperty="id"  >
+    insert into promotion 
+	     <trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="id != null" >
+	        id,
+	      </if>
+	      <if test="prom_sn != null" >
+	        prom_sn,
+	      </if>
+	      <if test="prom_name != null" >
+	        prom_name,
+	      </if>
+	      <if test="type != null" >
+	        type,
+	      </if>
+	      <if test="is_mutex != null" >
+	        is_mutex,
+	      </if>
+	      <if test="prom_start != null" >
+	        prom_start,
+	      </if>
+	      <if test="prom_end != null" >
+	        prom_end,
+	      </if>
+	       <if test="prom_order_amount != null">
+	      	prom_order_amount, 
+	       </if>
+	       <if test="creat_time != null">
+	      	creat_time,
+	       </if>
+	       <if test="confirm_time != null">
+	      	confirm_time,
+	       </if>
+	       <if test="enabled != null">
+	      	enabled,
+	       </if>
+	       <if test="update_time != null">
+	      	update_time,
+	       </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="id != null" >
+	        #{id},
+	      </if>
+	      <if test="prom_sn != null" >
+	        #{prom_sn},
+	      </if>
+	      <if test="prom_name != null" >
+	        #{prom_name},
+	      </if>
+	      <if test="type != null" >
+	        #{type},
+	      </if>
+	      <if test="is_mutex != null" >
+	        #{is_mutex},
+	      </if>
+	      <if test="prom_start != null" >
+	        #{prom_start},
+	      </if>
+	      <if test="prom_end != null" >
+	        #{prom_end},
+	      </if>
+	       <if test="prom_order_amount != null">
+	      	#{prom_order_amount}, 
+	       </if>
+	       <if test="creat_time != null">
+	      	#{creat_time},
+	       </if>
+	       <if test="confirm_time != null">
+	      	#{confirm_time},
+	       </if>
+	       <if test="enabled != null">
+	      	#{enabled},
+	       </if>
+	       <if test="update_time != null">
+	      	#{update_time},
+	       </if>
+	    </trim>
+    </insert>
+    
+   	<insert id="batchInsert" useGeneratedKeys="true" parameterType="java.util.List" keyProperty="id">
+		insert into
+		promotion
+		(id, prom_sn, prom_name,
+		type, is_mutex, is_confirm,
+		prom_start, prom_end,
+		prom_order_amount,creat_time,confirm_time,enabled,
+		update_time
+		)
+		values
+		<foreach collection="list" item="ts" index="index" separator=",">
+			(#{ts.id}, #{ts.prom_sn},
+			#{ts.prom_name},
+			#{ts.type}, #{ts.is_mutex}, #{ts.is_confirm},
+			#{ts.prom_start},
+			#{ts.prom_end},
+			#{ts.prom_order_amount},
+			#{ts.creat_time},
+			#{ts.confirm_time},
+			#{ts.enabled}, #{ts.update_time}
+			
+			)
+		</foreach>
+	</insert>
+    
+    <update id="deletePromotion" parameterType="com.huixin.web.model.Promotion">
+    update promotion
+	    <set>
+	     enabled = 1
+	    </set>
+	    where id = #{id}
+    </update>
+    
+    <update id="updatePromotionById" parameterType="com.huixin.web.model.Promotion" >
+    update promotion 
+	    <set>
+	      <if test="id != null" >
+	        id = #{id},
+	      </if>
+	      <if test="prom_sn != null" >
+	       prom_sn = #{prom_sn},
+	      </if>
+	      <if test="prom_name != null" >
+	        prom_name = #{prom_name},
+	      </if>
+	      <if test="type != null" >
+	        type = #{type},
+	      </if>
+	      <if test="is_mutex != null" >
+	        is_mutex = #{is_mutex},
+	      </if>
+	      <if test="prom_start != null" >
+	        prom_start = #{prom_start},
+	      </if>
+	      <if test="prom_end != null" >
+	        prom_end = #{prom_end},
+	      </if>
+	       <if test="prom_order_amount != null">
+	      	prom_order_amount = #{prom_order_amount}, 
+	       </if>
+	       <if test="creat_time != null">
+	      	creat_time = #{creat_time},
+	       </if>
+	       <if test="confirm_time != null">
+	      	confirm_time = #{confirm_time},
+	       </if>
+	       <if test="enabled != null">
+	      	enabled = #{enabled},
+	       </if>
+	       <if test="update_time != null">
+	      	update_time = #{update_time},
+	       </if>
+	    </set>
+	    where id = #{id}
+    </update>
+    <delete id="deletePromById" parameterType="com.huixin.web.model.Promotion">
+    delete from promotion where id = #{id}
+    </delete>
+</mapper>
