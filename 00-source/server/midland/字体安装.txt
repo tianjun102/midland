@@ -1,0 +1,6 @@
+    # cd /usr/share/fonts/win
+    # mkfontscale
+    # mkfontdir
+    # fc-cache
+    
+    sudo fc-cache -fv
