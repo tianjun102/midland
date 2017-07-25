@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huixin.web.dao.ClassMapper">
+    <resultMap id="BaseResultMap" type="com.huixin.web.model.Class">
+        <id column="class_id" property="classId" jdbcType="INTEGER" />
+        <result column="property_id" property="propertyId" jdbcType="INTEGER" />
+        <result column="class_name" property="className" jdbcType="VARCHAR" />
+        <result column="class_pic" property="classPic" jdbcType="VARCHAR" />
+        <result column="target_url" property="targetUrl" jdbcType="VARCHAR" />
+        <result column="link_url" property="linkUrl" jdbcType="VARCHAR" />
+        <result column="class_description" property="classDescription" jdbcType="VARCHAR" />
+        <result column="cat_id" property="catId" jdbcType="INTEGER" />
+        <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+        <result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
+        <result column="addtime" property="addTime" jdbcType="TIMESTAMP" />
+        <result column="isclose" property="isClose" jdbcType="INTEGER" />
+        <result column="property_name" property="propertyName" jdbcType="VARCHAR" />
+        <result column="user_by" property="userBy" jdbcType="VARCHAR" />
+    </resultMap>
+    
+	<sql id="Base_Column_List" >
+		class_id,property_id,class_name,class_pic,target_url,link_url,class_description,cat_id,parent_id,sort_order,addtime,isclose,user_by
+	</sql>
+	
+    <select id="selectClassList" resultMap="BaseResultMap">
+      select 
+      (select count(0) from class AS a where b.class_id = a.parent_id ) AS counts,b.class_id,b.property_id,b.class_name,b.class_pic,b.target_url,b.link_url,b.class_description,b.cat_id,b.parent_id,b.sort_order,b.addtime,b.isclose,b.user_by,c.property_name
+       from class AS b inner JOIN class_property c ON b.property_id = c.property_id where b.parent_id IS NULL and b.isclose = 0
+    </select>
+    
+    <select id="selectClassByParem" resultMap="BaseResultMap" parameterType="java.util.Map">
+      select 
+	      class_id,a.property_id,class_name,class_pic,target_url,link_url,class_description,cat_id,parent_id,sort_order,a.addtime,a.isclose,a.user_by
+	       from class a inner JOIN class_property b ON a.property_id = b.property_id where 1=1
+	       <if test="classId != null">
+	       		and a.class_id = #{classId}
+	       </if>
+	       <if test="propertyId != null">
+	      		and a.property_id = #{propertyId}
+	       </if>
+	       <if test="className != null">
+	      		and a.class_name = #{className}
+	       </if>
+	       <if test="classPic != null">
+	      		and a.class_pic = #{classPic}
+	       </if>
+	       <if test="targetUrl != null">
+	      		and a.target_url = #{targetUrl}
+	       </if>
+	       <if test="linkUrl != null">
+	      		and a.link_url = #{linkUrl}
+	       </if>
+	       <if test="classDescription != null">
+	      		and a.class_description = #{classDescription}
+	       </if>
+	       <if test="catId != null">
+	      		and a.cat_id = #{catId}
+	       </if>
+	       <if test="parentId != null">
+	      		and a.parent_id = #{parentId}
+	       </if>
+	       <if test="sortOrder != null">
+	      		and a.sort_order = #{sortOrder}
+	       </if>
+	       <if test="isClose != null">
+	      		and a.isclose = #{isClose}
+	       </if>
+    </select>
+    
+    
+    <select id="selectClassByEntity" resultMap="BaseResultMap" parameterType="com.huixin.web.model.Class">
+	  select 
+      (select count(0) from class AS a where b.class_id = a.parent_id ) AS counts,b.class_id,b.property_id,b.class_name,b.class_pic,b.target_url,b.link_url,b.class_description,b.cat_id,b.parent_id,b.sort_order,b.addtime,b.isclose,b.user_by,c.property_name
+      from class AS b inner JOIN class_property c ON b.property_id = c.property_id where 1=1
+	       <if test="classId != null">
+	       		and b.class_id = #{classId}
+	       </if>
+	       <if test="className != null">
+	      		and b.class_name like CONCAT(CONCAT('%', #{className}), '%')
+	       </if>
+	       <if test="classDescription != null">
+	      		and b.class_description = #{classDescription}
+	       </if>
+	       <if test="catId != null">
+	      		and b.cat_id = #{catId}
+	       </if>
+	       <if test="parentId != null">
+	      		and b.parent_id = #{parentId}
+	       </if>
+	       <if test="isClose != null">
+	      		and b.isclose = #{isClose}
+	       </if>
+	       <if test="isClose == null">
+	      		and b.isclose = 0
+	       </if>
+    </select>
+    
+    <select id="selectClassById" resultMap="BaseResultMap" parameterType="com.huixin.web.model.Class" >
+          select 
+	      a.class_id,a.property_id,a.class_name,a.class_pic,a.target_url,a.link_url,a.class_description,a.cat_id,a.parent_id,a.sort_order,a.addtime,a.isclose,a.user_by,b.property_name
+	       from class a inner JOIN class_property b ON a.property_id = b.property_id where a.class_id = #{classId}
+    </select>
+    
+    
+    <select id="selectChildMenus" resultMap="BaseResultMap" parameterType="com.huixin.web.model.Class">
+	    select 
+	    a.class_id,a.property_id,a.class_name,a.class_pic,a.target_url,a.link_url,a.class_description,a.cat_id,a.parent_id,a.sort_order,a.addtime,a.isclose,a.user_by,b.property_name
+	    from class a inner JOIN class_property b ON a.property_id = b.property_id
+	    where parent_id = #{classId}
+    </select>
+    
+    <select id="selectChildMenusList" resultMap="BaseResultMap" parameterType="com.huixin.web.model.Class">
+      select 
+      (select count(0) from class AS a where b.class_id = a.parent_id ) AS counts,b.class_id,b.property_id,b.class_name,b.class_pic,b.target_url,b.link_url,b.class_description,b.cat_id,b.parent_id,b.sort_order,b.addtime,b.isclose,b.user_by,c.property_name
+       from class AS b inner JOIN class_property c ON b.property_id = c.property_id where b.parent_id =#{classId}
+    </select>
+    
+    <select id="selectParentMenus" resultMap="BaseResultMap" parameterType="com.huixin.web.model.Class">
+      select 
+       b.class_id,b.property_id,b.class_name,b.class_pic,b.target_url,b.link_url,b.class_description,b.cat_id,b.parent_id,b.sort_order,b.addtime,b.isclose,b.user_by,c.property_name
+       from class AS b inner JOIN class_property c ON b.property_id = c.property_id where b.class_id =#{parentId}
+    </select>
+    
+    <!-- 取并集查出一二级菜单 -->
+    <select id="selectUnionMenu" resultMap="BaseResultMap" >
+		SELECT a.class_id, a.property_id,a.class_name,a.cat_id, p1.property_name from class a INNER JOIN class_property p1 on a.property_id = p1.property_id where parent_id IS NULL AND a.cat_id IS NULL
+		union all 
+		SELECT b.class_id, b.property_id,b.class_name,b.cat_id ,p2.property_name from class b INNER JOIN class_property p2 on b.property_id = p2.property_id where b.cat_id IS NULL AND parent_id in (SELECT class_id from class c where parent_id IS NULL)
+    </select>
+    
+    <insert id="insetClass" parameterType="com.huixin.web.model.Class">
+    insert into class 
+	     <trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="classId != null" >
+	        class_id,
+	      </if>
+	      <if test="propertyId != null" >
+	        property_id,
+	      </if>
+	      <if test="className != null" >
+	        class_name,
+	      </if>
+	      <if test="classPic != null" >
+	        class_pic,
+	      </if>
+	      <if test="targetUrl != null" >
+	        target_url,
+	      </if>
+	      <if test="linkUrl != null" >
+	        link_url,
+	      </if>
+	      <if test="classDescription != null" >
+	        class_description,
+	      </if>
+	      <if test="catId != null" >
+	        cat_id,
+	      </if>
+	      <if test="parentId != null" >
+	        parent_id,
+	      </if>
+	       <if test="sortOrder != null">
+	      	sort_order, 
+	       </if>
+	       <if test="isClose != null">
+	      	isclose,
+	       </if>
+	       <if test="userBy !=null">
+	        user_by
+	       </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="classId != null" >
+	        #{classId},
+	      </if>
+	      <if test="propertyId != null" >
+	        #{propertyId},
+	      </if>
+	      <if test="className != null" >
+	        #{className},
+	      </if>
+	      <if test="classPic != null" >
+	        #{classPic},
+	      </if>
+	      <if test="targetUrl != null" >
+	        #{targetUrl},
+	      </if>
+	      <if test="linkUrl != null" >
+	        #{linkUrl},
+	      </if>
+	      <if test="classDescription != null" >
+	        #{classDescription},
+	      </if>
+	      <if test="catId != null" >
+	        #{catId},
+	      </if>
+	      <if test="parentId != null" >
+	        #{parentId},
+	      </if>
+	       <if test="sortOrder != null">
+	      	#{sortOrder}, 
+	       </if>
+	       <if test="isClose != null">
+	      	#{isClose},
+	       </if>
+	       <if test="userBy !=null">
+	        #{userBy}
+	       </if>
+	    </trim>
+    </insert>
+    
+    <delete id="deleteClass" parameterType="com.huixin.web.model.Class">
+    delete FROM class where class_id = #{classId}
+    </delete>
+    
+    <update id="updateClassById" parameterType="com.huixin.web.model.Class" >
+    update class 
+	    <set>
+	      <if test="propertyId != null" >
+	        property_id = #{propertyId},
+	      </if>
+	      <if test="className != null" >
+	        class_name = #{className},
+	      </if>
+	      <if test="classPic != null" >
+	        class_pic = #{classPic},
+	      </if>
+	      <if test="targetUrl != null" >
+	        target_url = #{targetUrl},
+	      </if>
+	      <if test="linkUrl != null" >
+	        link_url = #{linkUrl},
+	      </if>
+	      <if test="classDescription != null" >
+	        class_description = #{classDescription},
+	      </if>
+	      <if test="catId != null" >
+	        cat_id = #{catId},
+	      </if>
+	      <if test="parentId != null" >
+	        parent_id = #{parentId},
+	      </if>
+	       <if test="sortOrder != null">
+	      	sort_order = #{sortOrder}, 
+	       </if>
+	       <if test="isClose != null">
+	      	isclose = #{isClose},
+	       </if>
+	       	<if test="userBy !=null">
+	        user_by=#{userBy}
+	       </if>
+	    </set>
+	    where class_id = #{classId}
+    </update>
+    
+    
+    
+
+</mapper>

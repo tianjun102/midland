@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huixin.web.dao.DistPlanMapper">
+
+	<resultMap id="DistPlanMap" type="com.huixin.web.model.DistPlan">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="dist_plan_sn" property="distPlanSn" jdbcType="VARCHAR" />
+		<result column="dist_plan_name" property="distPlanName"
+			jdbcType="VARCHAR" />
+		<result column="creat_time" property="creatTime" jdbcType="TIMESTAMP" />
+		<result column="user_by" property="userBy" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<resultMap id="PlanCustomerMap" type="com.huixin.web.model.DistPlanCustomer">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="dist_plan_id" property="distPlanId" jdbcType="INTEGER" />
+		<result column="cust_id" property="custId" jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap id="PlanProductMap" type="com.huixin.web.model.DistPlanProduct">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="dist_plan_id" property="distPlanId" jdbcType="INTEGER" />
+		<result column="prod_id" property="prodId" jdbcType="INTEGER" />
+	</resultMap>
+
+
+	<sql id="Plan_Column_List">
+		id, dist_plan_sn, dist_plan_name, creat_time, user_by,
+		update_time
+	</sql>
+
+
+	<sql id="Cust_Column_List">
+		id, dist_plan_id, cust_id
+	</sql>
+
+
+
+	<sql id="Prod_Column_List">
+		id, dist_plan_id, prod_id
+	</sql>
+
+	<select id="queryDistPlanList" resultMap="DistPlanMap"
+		parameterType="com.huixin.web.model.DistPlan">
+		select
+		<include refid="Plan_Column_List" />
+		from dist_plan
+		where 1 = 1
+		<if test="distPlanSn != null  and distPlanSn != '' ">
+			and dist_plan_sn like
+			concat(concat('%',#{distPlanSn,jdbcType=VARCHAR}),'%')
+		</if>
+		<if test="distPlanName != null  and distPlanName != '' ">
+			and dist_plan_name like
+			concat(concat('%',#{distPlanName,jdbcType=VARCHAR}),'%')
+		</if>
+	</select>
+
+
+	<select id="queryDistPlanObj" resultMap="DistPlanMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Plan_Column_List" />
+		from dist_plan
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+
+	<delete id="deleteDistPlanObj" parameterType="java.lang.Integer">
+		delete from
+		dist_plan
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="addDistPlanObj" parameterType="com.huixin.web.model.DistPlan"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into dist_plan
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="distPlanSn != null">
+				dist_plan_sn,
+			</if>
+			<if test="distPlanName != null">
+				dist_plan_name,
+			</if>
+			<if test="creatTime != null">
+				creat_time,
+			</if>
+			<if test="userBy != null">
+				user_by,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="distPlanSn != null">
+				#{distPlanSn,jdbcType=VARCHAR},
+			</if>
+			<if test="distPlanName != null">
+				#{distPlanName,jdbcType=VARCHAR},
+			</if>
+			<if test="creatTime != null">
+				#{creatTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userBy != null">
+				#{userBy,jdbcType=INTEGER},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateDistPlanObj" parameterType="com.huixin.web.model.DistPlan">
+		update dist_plan
+		<set>
+			<if test="distPlanSn != null">
+				dist_plan_sn = #{distPlanSn,jdbcType=VARCHAR},
+			</if>
+			<if test="distPlanName != null">
+				dist_plan_name = #{distPlanName,jdbcType=VARCHAR},
+			</if>
+			<if test="creatTime != null">
+				creat_time = #{creatTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userBy != null">
+				user_by = #{userBy,jdbcType=INTEGER},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+
+	<select id="queryCatProForList" resultType="map">
+		SELECT
+			id,
+			sid,
+			showName,
+			parentId,
+			countNum,
+			type
+		FROM
+			(
+				SELECT
+					c.cat_id id,
+					0 AS 'sid',
+					c.cat_name showName,
+					c.parent_id parentId,
+					(
+						SELECT
+							count(product_id)
+						FROM
+							product t
+						WHERE
+							t.cat_Id = c.cat_id
+						AND t.is_show_all = 0
+						AND t.prod_status = 1
+						AND t.is_delete = 0
+					) 'countNum',
+					0 AS 'type'
+				FROM
+					category c
+				WHERE
+					c.is_show = 1
+				UNION
+					SELECT
+						(p.product_id + 100000) id,
+						p.product_id AS 'sid',
+						p.product_name showName,
+						p.cat_id parentId,
+						0 AS 'countNum',
+						1 AS 'type'
+					FROM
+						product p
+					WHERE
+						p.prod_status = 1
+					AND 	p.is_show_all = 0
+					AND p.is_delete = 0
+			) s
+		ORDER BY
+			s.id
+	</select>
+
+
+	<select id="queryAreaCustForList" resultType="map">
+		SELECT
+			id,
+			sid,
+			showName,
+			parentId,
+			countNum,
+			type
+		FROM
+			(
+				SELECT
+					a.area_id id,
+					0 AS 'sid',
+					a.area_name showName,
+					0 AS parentId,
+					(
+						SELECT
+							count(t.cust_id)
+						FROM
+							customer t
+						WHERE
+							t.area_id = a.area_id
+						AND t. STATUS = 1
+						AND t.cust_type = 1
+					) 'countNum',
+					0 AS 'type'
+				FROM
+					area a
+				WHERE
+					a.is_show = 1
+				UNION
+					SELECT
+						(c.cust_id + 100000) id,
+						c.cust_id AS 'sid',
+						c.cust_name showName,
+						c.area_id parentId,
+						0 AS 'countNum',
+						1 AS 'type'
+					FROM
+						customer c
+					WHERE
+						c. STATUS = 1
+					AND c.cust_type = 1
+			) s
+		ORDER BY
+			s.id
+	</select>
+
+
+	<insert id="addPlanProduct" parameterType="com.huixin.web.model.DistPlanProduct">
+		insert into dist_plan_product
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="distPlanId != null">
+				dist_plan_id,
+			</if>
+			<if test="prodId != null">
+				prod_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="distPlanId != null">
+				#{distPlanId,jdbcType=INTEGER},
+			</if>
+			<if test="prodId != null">
+				#{prodId,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+	<insert id="addPlanCustomer" parameterType="com.huixin.web.model.DistPlanCustomer">
+		insert into dist_plan_customer
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="distPlanId != null">
+				dist_plan_id,
+			</if>
+			<if test="custId != null">
+				cust_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="distPlanId != null">
+				#{distPlanId,jdbcType=INTEGER},
+			</if>
+			<if test="custId != null">
+				#{custId,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+
+	<delete id="deletePlanCustomer" parameterType="java.lang.Integer">
+		delete from
+		dist_plan_customer
+		where dist_plan_id = #{distPlanId,jdbcType=INTEGER}
+	</delete>
+
+
+	<delete id="deletePlanProduct" parameterType="java.lang.Integer">
+		delete from
+		dist_plan_product
+		where dist_plan_id = #{distPlanId,jdbcType=INTEGER}
+	</delete>
+
+
+	<select id="queryPlanCustomer" resultMap="PlanCustomerMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Cust_Column_List" />
+		from dist_plan_customer
+		where dist_plan_id =
+		#{distPlanId,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryPlanProduct" resultMap="PlanProductMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Prod_Column_List" />
+		from dist_plan_product
+		where dist_plan_id =
+		#{distPlanId,jdbcType=INTEGER}
+	</select>
+</mapper>

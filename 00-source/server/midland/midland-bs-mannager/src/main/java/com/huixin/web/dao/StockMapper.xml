@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huixin.web.dao.StockMapper" >
+  <resultMap id="KctzdMap" type="com.huixin.web.model.Kctzd" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="djbh" property="djbh" jdbcType="VARCHAR" />
+    <result column="total_num" property="totalNum" jdbcType="INTEGER" />
+    <result column="kctzd_note" property="kctzdNote" jdbcType="VARCHAR" />
+    <result column="is_complete" property="isComplete" jdbcType="INTEGER" />
+    <result column="addTime" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="user_by" property="userBy" jdbcType="INTEGER" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="ItemMap" type="com.huixin.web.model.KctzdItem" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="kctzd_id" property="kctzdId" jdbcType="INTEGER" />
+    <result column="prod_id" property="prodId" jdbcType="INTEGER" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <resultMap id="stockMap" type="com.huixin.web.model.Stock" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ck_id" property="ckId" jdbcType="INTEGER" />
+    <result column="ck_code" property="ckCode" jdbcType="VARCHAR" />
+    <result column="product_id" property="productId" jdbcType="INTEGER" />
+    <result column="sl" property="sl" jdbcType="INTEGER" />
+    <result column="sl1" property="sl1" jdbcType="INTEGER" />
+    <result column="sl2" property="sl2" jdbcType="INTEGER" />
+    <result column="safe_sl" property="safeSl" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="cat_id" property="catId" jdbcType="INTEGER" />
+    <result column="cat_name" property="catName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Kctzd_Column_List" > 
+    id, djbh, total_num, kctzd_note, is_complete, 
+    DATE_FORMAT(addTime,'%Y-%m-%d') addTime, user_by, 
+    DATE_FORMAT(updateTime,'%Y-%m-%d') updateTime
+  </sql>
+  
+  <sql id="Item_Column_List" >
+    id, kctzd_id, prod_id, num
+  </sql>
+  
+  <sql id="Stock_Column_List" >
+     id, ck_id, ck_code, product_id, sl, sl1, sl2, safe_sl, update_time 
+  </sql>
+  
+  <select id="queryKctzdList" resultMap="KctzdMap" parameterType="com.huixin.web.model.Kctzd" >
+    select
+    <include refid="Kctzd_Column_List" />
+    from kctzd 
+    	where 1  = 1 
+    	 <if test="djbh != null  and djbh != '' ">
+			      and djbh like   concat(concat('%',#{djbh,jdbcType=VARCHAR}),'%') 
+		 </if>
+		 <if test="isComplete != null">
+		        and is_complete = #{isComplete,jdbcType=BIGINT}
+		 </if>
+		 <if test="addTimeStart != null and addTimeStart !=''">
+				 and addTime<![CDATA[>=]]> #{addTimeStart,jdbcType=TIMESTAMP}
+		</if>
+		<if test="addTimeEnd != null and addTimeEnd !=''">
+				 and addTime<![CDATA[<=]]> #{addTimeEnd,jdbcType=TIMESTAMP}
+		</if>
+		 <if test="updateTimeStart != null and updateTimeStart !=''">
+				 and updateTime<![CDATA[>=]]> #{updateTimeStart,jdbcType=TIMESTAMP}
+		</if>
+		<if test="updateTimeEnd != null and updateTimeEnd !=''">
+				 and updateTime<![CDATA[<=]]> #{updateTimeEnd,jdbcType=TIMESTAMP}
+		</if>
+      order by id desc
+  </select>
+  
+  <select id="queryKctzdObj" resultMap="KctzdMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Kctzd_Column_List" />
+    from kctzd
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteKctzdObj" parameterType="java.lang.Integer" >
+    delete from kctzd
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="addKctzdObj" parameterType="com.huixin.web.model.Kctzd"  useGeneratedKeys="true" keyProperty="id">
+    insert into kctzd
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="djbh != null" >
+        djbh,
+      </if>
+      <if test="totalNum != null" >
+        total_num,
+      </if>
+      <if test="kctzdNote != null" >
+        kctzd_note,
+      </if>
+      <if test="isComplete != null" >
+        is_complete,
+      </if>
+      <if test="addTime != null" >
+        addTime,
+      </if>
+      <if test="userBy != null" >
+        user_by,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="djbh != null" >
+        #{djbh,jdbcType=VARCHAR},
+      </if>
+      <if test="totalNum != null" >
+        #{totalNum,jdbcType=INTEGER},
+      </if>
+      <if test="kctzdNote != null" >
+        #{kctzdNote,jdbcType=VARCHAR},
+      </if>
+      <if test="isComplete != null" >
+        #{isComplete,jdbcType=BIT},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userBy != null" >
+        #{userBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+ 
+  <update id="updateKctzdObj" parameterType="com.huixin.web.model.Kctzd" >
+    update kctzd
+    <set >
+      <if test="djbh != null" >
+        djbh = #{djbh,jdbcType=VARCHAR},
+      </if>
+      <if test="totalNum != null" >
+        total_num = #{totalNum,jdbcType=INTEGER},
+      </if>
+      <if test="kctzdNote != null" >
+        kctzd_note = #{kctzdNote,jdbcType=VARCHAR},
+      </if>
+      <if test="isComplete != null" >
+        is_complete = #{isComplete,jdbcType=BIT},
+      </if>
+      <if test="userBy != null" >
+        user_by = #{userBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+	     updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <insert id="addKctzdItemObj" parameterType="com.huixin.web.model.KctzdItem" >
+    insert into kctzd_item
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="kctzdId != null" >
+        kctzd_id,
+      </if>
+      <if test="prodId != null" >
+        prod_id,
+      </if>
+      <if test="num != null" >
+        num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="kctzdId != null" >
+        #{kctzdId,jdbcType=INTEGER},
+      </if>
+      <if test="prodId != null" >
+        #{prodId,jdbcType=INTEGER},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  
+  <select id="queryKctzdItemList" parameterType="java.lang.Integer" resultType="com.huixin.web.model.KctzdItem" >
+	 SELECT
+		i.id id,
+		i.kctzd_id kctzdId,
+		i.prod_id prodId,
+		i.num num,
+		p.product_code productCode,
+		p.product_name productName
+	FROM
+		kctzd_item i
+	LEFT JOIN product p ON i.prod_id = p.product_id
+	WHERE  i.kctzd_id  =   #{kctzd_id,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteKctzdItemObj" parameterType="java.lang.Integer" >
+    delete from kctzd_item
+    where kctzd_Id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  
+  
+  <update id="updateKctzdItemObj" parameterType="com.huixin.web.model.KctzdItem" >
+    update kctzd_item
+    <set >
+      <if test="kctzdId != null" >
+        kctzd_id = #{kctzdId,jdbcType=VARCHAR},
+      </if>
+      <if test="prodId != null" >
+        prod_id = #{prodId,jdbcType=INTEGER},
+      </if>
+      <if test="num != null" >
+        num = #{num,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+   <update id="changeKctzd" parameterType="com.huixin.web.model.Kctzd" >
+    update kctzd  
+      <set >
+      	 <if test="isComplete != null" >
+       	 	is_complete = #{isComplete,jdbcType=BIT},
+    	  </if>
+	     <if test="updateTime != null" >
+	        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+	      </if>
+      </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="queryStockList" resultMap="stockMap" parameterType="com.huixin.web.model.Stock">
+  	SELECT 
+       p.product_name,
+       p.product_code,
+       c.cat_id,
+       c.cat_name,
+       s.id,
+       s.product_id,
+       s.sl,
+       s.sl1,
+       s.sl2,
+       s.safe_sl
+	  FROM stock s, product p, category c
+	 WHERE s.product_id = p.product_id 
+	 	AND c.cat_id = p.cat_id
+	 	AND  p.is_delete = 0 
+	 	<if test="productName != null and productName !=''" >
+       	 AND p.product_name like  concat(concat('%',#{productName,jdbcType=VARCHAR}),'%') 
+    	</if>
+    	<if test="catId != null" >
+       	 AND c.cat_id = #{catId,jdbcType=INTEGER}
+    	</if>
+    	<if test="kcl == 0 " >
+    		<if test="l1 != null" >
+       	 		AND s.sl >= #{l1,jdbcType=INTEGER}
+    		</if>
+    		<if test="l2 != null" >
+       	 		<![CDATA[ AND s.sl <= #{l2,jdbcType=INTEGER}]]>
+    		</if>
+    	</if>
+    	<if test="kcl == 1 " >
+    		<if test="l1 != null" >
+       	 		AND s.sl2 >= #{l1,jdbcType=INTEGER}
+    		</if>
+    		<if test="l2 != null" >
+       	 		<![CDATA[ AND s.sl2 <= #{l2,jdbcType=INTEGER}]]>
+    		</if>
+    	</if>
+    	<if test="kcl == 2 " >
+    		<if test="l1 != null" >
+       	 		AND s.safe_sl >= #{l1,jdbcType=INTEGER}
+    		</if>
+    		<if test="l2 != null" >
+       	 		<![CDATA[ AND s.safe_sl <= #{l2,jdbcType=INTEGER}]]>
+    		</if>
+    	</if>
+    	   
+  </select>
+  
+  <update id="batchUpdateStock" parameterType="java.util.List">
+  	<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+  		UPDATE stock s,product p
+		    <set>  
+             s.safe_sl=${item.safeSl}
+          	</set>  
+		 WHERE p.product_id=s.product_id 
+		 and p.product_code='${item.productCode}'
+		<!--  and p.product_name=${item.productName} -->
+  	</foreach>  
+  </update>
+  
+  
+  <insert id="addStockObj" parameterType="com.huixin.web.model.Stock" >
+    insert into stock (id, ck_id, ck_code, 
+      product_id, sl, sl1, 
+      sl2, safe_sl, update_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{ckId,jdbcType=INTEGER}, #{ckCode,jdbcType=VARCHAR}, 
+      #{productId,jdbcType=INTEGER}, #{sl,jdbcType=INTEGER}, #{sl1,jdbcType=INTEGER}, 
+      #{sl2,jdbcType=INTEGER}, #{safeSl,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  
+  <update id="updateStockObj" parameterType="com.huixin.web.model.Stock" >
+    update stock
+    <set >
+      <if test="ckId != null" >
+        ck_id = #{ckId,jdbcType=INTEGER},
+      </if>
+      <if test="ckCode != null" >
+        ck_code = #{ckCode,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="sl != null" >
+        sl = #{sl,jdbcType=INTEGER},
+      </if>
+      <if test="sl1 != null" >
+        sl1 = #{sl1,jdbcType=INTEGER},
+      </if>
+      <if test="sl2 != null" >
+        sl2 = #{sl2,jdbcType=INTEGER},
+      </if>
+      <if test="safeSl != null" >
+        safe_sl = #{safeSl,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+   <select id="queryStockByPid" resultType="com.huixin.web.model.Stock"  parameterType="java.lang.Integer" >
+    select 
+   	 <include refid="Stock_Column_List" />
+    from stock
+    where product_id = #{pid,jdbcType=INTEGER}
+  </select>
+  
+    <delete id="deleteKctzdItem" parameterType="java.lang.Integer" >
+    delete from kctzd_item
+    where id = #{itemId,jdbcType=INTEGER}
+  </delete>
+</mapper>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huixin.web.dao.SettlementItemMapper">
+    <resultMap id="BaseResultMap" type="com.huixin.web.model.SettlementItem">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="sett_id" property="sett_id" jdbcType="INTEGER" />
+        <result column="order_id" property="order_id" jdbcType="INTEGER" />
+    </resultMap>
+    
+	<sql id="Base_Column_List" >
+		id,sett_id,type,order_id
+	</sql>
+	
+    
+    <select id="selectSettlementItemByEntity" resultMap="BaseResultMap" parameterType="com.huixin.web.model.SettlementItem">
+			select id,sett_id,order_id 
+			from settlement_item a
+			 where 1=1
+	       <if test="id != null">
+	       		and a.id = #{id}
+	       </if>
+	       <if test="sett_id != null">
+	      		and a.sett_id = #{sett_id}
+	       </if>
+	       <if test="order_id != null">
+	      		and a.order_id = #{order_id}
+	       </if>
+    </select>
+    
+    <select id="selectSettlementItemById" resultMap="BaseResultMap" parameterType="com.huixin.web.model.SettlementItem" >
+          select id,sett_id,order_id 
+	       from settlement_item where id = #{id}
+    </select>
+    
+    <insert id="insetSettlementItem" parameterType="com.huixin.web.model.SettlementItem" useGeneratedKeys="true" keyProperty="id"  >
+    insert into settlement_item 
+	     <trim prefix="(" suffix=")" suffixOverrides="," >
+	      <if test="id != null" >
+	        id,
+	      </if>
+	      <if test="sett_id != null" >
+	        sett_id,
+	      </if>
+	      <if test="order_id != null" >
+	        order_id,
+	      </if>
+	    </trim>
+	    <trim prefix="values (" suffix=")" suffixOverrides="," >
+	      <if test="id != null" >
+	        #{id},
+	      </if>
+	      <if test="sett_id != null" >
+	        #{sett_id},
+	      </if>
+	      <if test="order_id != null" >
+	        #{order_id},
+	      </if>
+	    </trim>
+    </insert>
+    
+   	<insert id="batchInsertSettlementItem" useGeneratedKeys="true" parameterType="java.util.List" >
+		insert into
+		settlement_item
+		(sett_id, order_id
+		)
+		values
+		<foreach collection="list" item="ts" index="index" separator=",">
+			(#{ts.sett_id},
+			#{ts.order_id}
+			)
+		</foreach>
+	</insert>
+    
+    <delete id="deleteSettlementItem" parameterType="com.huixin.web.model.Settlement">
+    delete from settlement_item where id = #{id}
+    </delete>
+    
+    <delete id="deleteSettlementItemBysettId" parameterType="com.huixin.web.model.Settlement">
+    delete from settlement_item where sett_id = #{id}
+    </delete>
+    
+    <delete id="deleteSettlementItemByOrderId" parameterType="map">
+    delete from settlement_item where sett_id = #{id} and order_id=#{orderId}
+    </delete>
+    
+    <update id="updateSettlementById" parameterType="com.huixin.web.model.Settlement" >
+    update settlement_item 
+	    <set>
+	      <if test="id != null" >
+	        id = #{id},
+	      </if>
+	      <if test="sett_id != null" >
+	       sett_id = #{sett_id},
+	      </if>
+	      <if test="order_id != null" >
+	        order_id = #{order_id},
+	      </if>
+	    </set>
+	    where id = #{id}
+    </update>
+</mapper>

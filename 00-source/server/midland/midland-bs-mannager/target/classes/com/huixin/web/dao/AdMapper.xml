@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huixin.web.dao.AdMapper">
+    <resultMap id="BaseResultMap" type="com.huixin.web.model.Ad">
+        <id column="ad_id" property="adId" jdbcType="INTEGER" />
+        <result column="ad_name" property="adName" jdbcType="VARCHAR" />
+        <result column="ad_info" property="adInfo" jdbcType="VARCHAR" />
+        <result column="ad_thumb_pic1" property="ad_thumb_pic1" jdbcType="VARCHAR" />
+        <result column="ad_thumb_pic2" property="ad_thumb_pic2" jdbcType="VARCHAR" />
+        <result column="ad_linkurl" property="adLinkurl" jdbcType="VARCHAR" />
+        <result column="media_type" property="mediaType" jdbcType="INTEGER" />
+        <result column="clicknum" property="clickNum" jdbcType="INTEGER" />
+        <result column="addtime" property="addTime" jdbcType="TIMESTAMP" />
+        <result column="enabled" property="enabled" jdbcType="INTEGER" />
+        <result column="updatetime" property="updateTime" jdbcType="INTEGER" />
+        <result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
+        <result column="user_by" property="userBy" jdbcType="VARCHAR" />
+    </resultMap>
+    
+	<sql id="Base_Column_List" >
+		ad_id,ad_name,ad_thumb_pic1,ad_thumb_pic2,ad_info,ad_linkurl,media_type,clicknum, DATE_FORMAT(addtime,'%Y-%m-%d %H:%i:%s') addtime,enabled,DATE_FORMAT(updatetime,'%Y-%m-%d %H:%i:%s') updatetime,sort_order,user_by
+	</sql>
+	
+    
+    <select id="selectAdByParem" resultMap="BaseResultMap" parameterType="com.huixin.web.model.Ad">
+      select 
+      <include refid="Base_Column_List"></include>
+       from ad where 1=1 
+       	  <if test="adName != null" >
+	       and ad_name like CONCAT(CONCAT('%', #{adName}), '%')
+	      </if>
+	      <if test="adInfo != null" >
+	       and ad_info = #{adInfo}
+	      </if>
+	      <if test="ad_thumb_pic1 != null" >
+	       and ad_thumb_pic1 = #{ad_thumb_pic1}
+	      </if>
+	      <if test="ad_thumb_pic2 != null" >
+	       and ad_thumb_pic2 = #{ad_thumb_pic2}
+	      </if>
+	      <if test="adLinkurl != null" >
+	       and ad_linkurl = #{adLinkurl}
+	      </if>
+	      <if test="mediaType != null" >
+	       and media_type = #{mediaType}
+	      </if>
+	      <if test="clickNum != null" >
+	       and clicknum = #{clickNum}
+	      </if>
+	      <if test="enabled != null" >
+	       and enabled = #{enabled}
+	      </if>
+	      
+	      <if test="updateTime != null" >
+           and updatetime = #{updateTime}
+	      </if>
+	      <if test="sortOrder != null" >
+	       and sort_order = #{sortOrder}
+	      </if>
+	      <if test="userBy != null" >
+	       and user_by = #{userBy}
+	      </if>
+    </select>
+    
+    <select id="selectAdById" resultMap="BaseResultMap" parameterType="com.huixin.web.model.Ad">
+      select 
+      <include refid="Base_Column_List"></include>
+       from ad where ad_id = #{adId}
+    </select>
+    
+    <insert id="insetAd" parameterType="com.huixin.web.model.Ad" useGeneratedKeys="true" keyProperty="adId">
+    insert into ad 
+    
+     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="adId != null" >
+        ad_id,
+      </if>
+      <if test="adName != null" >
+        ad_name,
+      </if>
+      <if test="adInfo != null" >
+        ad_info,
+      </if>
+      <if test="ad_thumb_pic1 != null" >
+        ad_thumb_pic1,
+      </if>
+      <if test="ad_thumb_pic2 != null" >
+        ad_thumb_pic2,
+      </if>
+      <if test="adLinkurl != null" >
+        ad_linkurl,
+      </if>
+      <if test="mediaType != null" >
+        media_type,
+      </if>
+      <if test="clickNum != null" >
+        clicknum,
+      </if>
+      <if test="enabled != null" >
+        enabled,
+      </if>
+      <if test="updateTime != null" >
+        updatetime,
+      </if>
+      <if test="sortOrder != null" >
+        sort_order,
+      </if>
+      <if test="userBy != null" >
+	    user_by,
+	   </if>
+	  <if test="addTime != null" >
+	    addtime
+	  </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="adId != null" >
+        #{adId},
+      </if>
+      <if test="adName != null" >
+        #{adName},
+      </if>
+      <if test="adInfo != null" >
+        #{adInfo},
+      </if>
+      <if test="ad_thumb_pic1 != null" >
+        #{ad_thumb_pic1},
+      </if>
+      <if test="ad_thumb_pic2 != null" >
+        #{ad_thumb_pic2},
+      </if>
+      <if test="adLinkurl != null" >
+        #{adLinkurl},
+      </if>
+      <if test="mediaType != null" >
+        #{mediaType},
+      </if>
+      <if test="clickNum != null" >
+        #{clickNum},
+      </if>
+      <if test="enabled != null" >
+        #{enabled},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime},
+      </if>
+      <if test="sortOrder != null" >
+        #{sortOrder},
+      </if>
+      <if test="userBy != null" >
+	    #{userBy},
+	  </if>
+	  <if test="addTime != null" >
+	    #{addTime}
+	  </if>
+    </trim>
+    
+    </insert>
+    
+    <update id="deleteAd" parameterType="com.huixin.web.model.Ad">
+    update ad
+    <set>
+     enabled = 0
+    </set>
+    where ad_id = #{adId}
+    </update>
+    
+    <delete id="deleteAdById" parameterType="com.huixin.web.model.Ad">
+    delete from ad
+    where ad_id = #{adId}
+    </delete>
+    
+    <update id="updateAdById" parameterType="com.huixin.web.model.Ad" >
+    update ad 
+	    <set>
+	      <if test="adName != null" >
+	        ad_name = #{adName},
+	      </if>
+	      <if test="adInfo != null" >
+	        ad_info = #{adInfo},
+	      </if>
+	      <if test="ad_thumb_pic1 != null" >
+	        ad_thumb_pic1 = #{ad_thumb_pic1},
+	      </if>
+	      <if test="ad_thumb_pic2 != null" >
+	        ad_thumb_pic2 = #{ad_thumb_pic2},
+	      </if>
+	      <if test="adLinkurl != null" >
+	        ad_linkurl = #{adLinkurl},
+	      </if>
+	      <if test="mediaType != null" >
+	        media_type = #{mediaType},
+	      </if>
+	      <if test="clickNum != null" >
+	        clicknum = #{clickNum},
+	      </if>
+	      <if test="enabled != null" >
+	        enabled = #{enabled},
+	      </if>
+	      <if test="updateTime != null" >
+        	updatetime = #{updateTime},
+	      </if>
+	      <if test="sortOrder != null" >
+	        sort_order = #{sortOrder},
+	      </if>
+	      <if test="userBy != null" >
+	        user_by = #{userBy},
+	      </if>
+	      <if test="addTime != null" >
+	   		addtime = #{addTime}
+	      </if>
+	    </set>
+	    where ad_id = #{adId}
+    </update>
+</mapper>

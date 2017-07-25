@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huixin.web.dao.SysLogMapper">
+	<resultMap id="BaseResultMap" type="com.huixin.web.model.SysLog">
+		<id column="log_id" property="logId" jdbcType="BIGINT" />
+		<result column="log_type" property="logType" jdbcType="BIGINT" />
+		<result column="log_content" property="logContent" jdbcType="VARCHAR" />
+		<result column="ip_address" property="ipAddress" jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="is_error" property="isError" jdbcType="BIGINT" />
+		<result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		log_id, log_type, log_content,ip_address, user_name,is_error,DATE_FORMAT(add_time,'%Y-%m-%d %H:%i:%s') add_time
+	</sql>
+
+	<insert id="insert" parameterType="com.huixin.web.model.SysLog">
+		insert into sys_log (log_id, log_type, log_content,ip_address,
+		user_name,is_error,add_time)
+		values (#{logId,jdbcType=BIGINT}, #{logType,jdbcType=BIGINT},
+		#{logContent,jdbcType=VARCHAR},
+		#{ipAddress,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{isError,jdbcType=BIGINT},
+		#{addTime,jdbcType=TIMESTAMP})
+	</insert>
+
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.huixin.web.model.SysLog">
+		select
+		<include refid="Base_Column_List" />
+		from sys_log where 1=1
+		<if test="logType != null">
+			and log_type = #{logType,jdbcType=BIGINT},
+		</if>
+	</select>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from sys_log
+		where log_id = #{logId,jdbcType=BIGINT}
+	</select>
+
+	<update id="updateByPrimaryKey" parameterType="com.huixin.web.model.SysLog">
+		update sys_log
+		<set>
+			<if test="logType != null">
+				log_type = #{logType,jdbcType=BIGINT},
+			</if>
+			<if test="roleSign != null">
+				log_content = #{logContent,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where log_id = #{logId,jdbcType=BIGINT}
+	</update>
+
+	<!-- 分页条件查询 -->
+	<select id="selectByExampleAndPage" resultMap="BaseResultMap"
+		parameterType="com.huixin.web.model.SysLog">
+		select
+		<include refid="Base_Column_List" />
+
+		from sys_log
+		where 1=1 
+		<if test="logType != null">
+		 and log_Type = #{logType,jdbcType=BIGINT}
+		</if>
+		<if test="logContent != null and logContent!=''">
+		 and log_content like CONCAT(CONCAT('%', #{logContent}), '%')
+		</if>
+		<if test="startTime != null and startTime !=''">
+		 and add_time<![CDATA[>=]]> #{startTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="endTime != null and endTime !=''">
+		 and add_time<![CDATA[<=]]> #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		<if test="userName != null and userName !=''">
+		 and user_name = #{userName,jdbcType=VARCHAR}
+		</if>
+		order by add_time desc 
+	</select>
+
+
+</mapper>
