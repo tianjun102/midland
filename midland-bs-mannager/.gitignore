@@ -1,11 +1,7 @@
 # Project ignore files
-/.settings
-/.classpath
-/.project
-/.tomcatplugin
-/target
-/work
-/src/main/webapp/.#webclasspath
-
-.idea
-webmvc.iml
+/*
+!.gitignore
+!src
+!pom.xml
+!*.txt
+!readme.md
